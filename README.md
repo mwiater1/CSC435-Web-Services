@@ -45,11 +45,98 @@ All of the features of Newsly will be available through the REST API as
     - The ability to mark an article as read and not have that article
     show up in future results. This can only be done by a registered
     user.
+- API Use History
+    - The ability to see a history of what calls were made using a
+    specific API key.
 
 ### API
-- List API endpoints and examples
+##### Search API Call
+
+This endpoint allows finding articles by keyword.
+
+Endpoint: ```https://localhost/search```
+
+| Parameter | Required? | Default | Description |
+|-----------|-----------|---------|-------------|
+| apiKey    | No        | null    | The API key to associate this search query with. |
+| keywords  | Yes       | null    | The search keyword(s) to use. |
+
+##### Articles API Call
+
+This endpoint allows for multiple or a single article to be returned
+ and is filtered based on the specified options.
+
+Endpoint: ```https://localhost/articles```
+
+| Parameter  | Required? | Default | Description |
+|------------|-----------|---------|-------------|
+| apiKey     | No        | null    | The API key to associate this articles query with. |
+| source     | No        | random  | The news source to use. |
+| sortBy     | No        | top     | How the articles are sorted. |
+| category   | No        | random  | The category to pick the article(s) from if the source is random. |
+| resultsAmt | No        | 1       | The amount of articles to display in the results. |
+
+##### User API Call
+
+This endpoint allows for the creation of a user, change of a users
+ name/password, and retrieval of a users API key.
+
+Endpoint: ```https://localhost/user```
+
+| Parameter | Required? | Default | Description |
+|-----------|-----------|---------|-------------|
+| apiKey    | Yes/No    | null    | The API key associated with the account. Required if changing user name or password.|
+| userName  | Yes/No    | null    | The user name of the account. |
+| password  | Yes/No    | null    | The password of the account. |
+
+##### Article API Call
+
+This endpoint marks the specified article as favorite, read, or neither.
+
+Endpoint: ```https://localhost/article```
+
+| Parameter | Required? | Default | Description |
+|-----------|-----------|---------|-------------|
+| apiKey    | Yes       | null    | The API key associated with an account. |
+| articleId | Yes       | null    | The id of an article. |
+| favorite  | No        | null    | Yes or No. Marks the article as favorite or not. |
+| read      | No        | null    | Yes or No. Marks te article as read or not. |
+
+##### History API Call
+
+This endpoint returns the history of favored articles, read articles, or
+ all API query's made with this API key.
+
+Endpoint: ```https://localhost/history```
+
+| Parameter | Required? | Default | Description |
+|-----------|-----------|---------|-------------|
+| apiKey    | Yes       | null    | The API key associated with an account. |
+| type      | Yes       | all     | The type of history requested. Options: all, favorite, read |
+
+##### Recommendation API Call
+
+This endpoint return a single article based previously favored and read
+ articles.
+
+Endpoint: ```https://localhost/recommend```
+
+| Parameter | Required? | Default | Description |
+|-----------|-----------|---------|-------------|
+| apiKey    | Yes       | null    | The API key associated with an account. |
 
 ### Web Interface
-- List UI features
+
+The user interface will implement all of the functionality of the API.
+ The [MaterializeCSS][2] framework will be used for the look and feel of the
+ interface.
+
+### Technology Stack
+
+The technology stack will change per requirements of each homework module.
+ One thing that remain constant is that HTML, CSS, Javascript, and
+ [MaterializeCSS][2] will be used for the user interface. Another thing
+ that will remain constant is that Java will be used for the back end.
 
 [1]: https://newsapi.org/
+[2]: http://materializecss.com/
