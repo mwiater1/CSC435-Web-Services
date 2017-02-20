@@ -1,2 +1,3 @@
 rootProject.name = 'csc435-web-services'
+include 'hw1'
 
