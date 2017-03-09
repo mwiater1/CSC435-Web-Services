@@ -582,13 +582,13 @@ Example Response:
 }
 ```
 
-### Web Interface
+## Web Interface
 
 The user interface will implement all of the functionality of the API.
  The [MaterializeCSS][2] framework will be used for the look and feel of the
  interface.
 
-### Technology Stack
+## Technology Stack
 
 The technology stack will change per requirements of each homework module.
  One thing that remain constant is that HTML, CSS, Javascript, and
