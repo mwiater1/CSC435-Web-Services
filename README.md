@@ -50,15 +50,18 @@ All of the features of Newsly will be available through the REST API as
     specific API key.
 
 ### API
-##### Search API Call
+##### Search Endpoint
 
-This endpoint allows finding articles by keyword.
+This endpoint allows finding articles by keyword(s).
+
+Accessing this endpoint via a ```GET``` call allows for a retrieval of
+a list of articles related to the keyword(s).
 
 Endpoint: ```https://localhost/search```
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
-| apiKey    | No        | null    | The API key to associate this search query with. |
+| apiKey    | Yes       | null    | The API key to associate this search query with. |
 | keywords  | Yes       | null    | The search keyword(s) to use. |
 
 ##### Articles API Call
@@ -76,7 +79,7 @@ Endpoint: ```https://localhost/articles```
 | category   | No        | random  | The category to pick the article(s) from if the source is random. |
 | resultsAmt | No        | 1       | The amount of articles to display in the results. |
 
-##### User API Call
+##### User Endpoint
 
 This endpoint allows for the creation of a user, change of a users
  password, and retrieval of a users API key.
