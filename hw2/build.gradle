@@ -1,0 +1,17 @@
+group 'com.mateuszwiater.csc435'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.h2database:h2:1.4.193'
+    compile 'javax.servlet:javax.servlet-api:4.0.0-b01'
+}
