@@ -50,7 +50,7 @@ All of the features of Newsly will be available through the REST API as
     specific API key.
 
 ### API
-##### Search Endpoint
+#### Search Endpoint
 
 This endpoint allows finding articles by keyword(s).
 
@@ -61,25 +61,28 @@ Endpoint: ```https://localhost/search```
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
-| apiKey    | Yes       | null    | The API key to associate this search query with. |
+| apiKey    | Yes       | null    | The API key of the user. |
 | keywords  | Yes       | null    | The search keyword(s) to use. |
 
-##### Articles API Call
+#### Articles Endpoint
 
-This endpoint allows for multiple or a single article to be returned
- and is filtered based on the specified options.
+This endpoint allows for retrieval of articles based on specified
+ constraints.
 
-Endpoint: ```https://localhost/articles```
+Accessing this endpoint a ```GET``` call allows for retrieval of
+ articles based on the specified parameters.
+
+```GET: https://localhost/articles```
 
 | Parameter  | Required? | Default | Description |
 |------------|-----------|---------|-------------|
-| apiKey     | No        | null    | The API key to associate this articles query with. |
-| source     | No        | random  | The news source to use. |
-| sortBy     | No        | top     | How the articles are sorted. |
-| category   | No        | random  | The category to pick the article(s) from if the source is random. |
-| resultsAmt | No        | 1       | The amount of articles to display in the results. |
+| apiKey     | YES       | null    | The API key of the user. |
+| source     | No        | random  | The news source to use. See [News Sources][#] for more information. |
+| sortBy     | No        | top     | Which list of articles to retrieve from the source. See [News Sources][#] for more information. |
+| category   | No        | random  | The category to pick the articles from if the source is random. See [Categories][#] for more information. |
+| resultsAmt | No        | 0       | The amount of articles to display in the results. 0 for as many as are available. |
 
-##### User Endpoint
+#### User Endpoint
 
 This endpoint allows for the creation of a user, change of a users
  password, and retrieval of a users API key.
