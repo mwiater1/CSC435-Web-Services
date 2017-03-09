@@ -79,15 +79,46 @@ Endpoint: ```https://localhost/articles```
 ##### User API Call
 
 This endpoint allows for the creation of a user, change of a users
- name/password, and retrieval of a users API key.
+ password, and retrieval of a users API key.
 
-Endpoint: ```https://localhost/user```
+Accessing this endpoint via a ```GET``` call allows for retrieval of a users
+ API key.
+
+GET: ```https://localhost/user```
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
-| apiKey    | Yes/No    | null    | The API key associated with the account. Required if changing user name or password.|
-| userName  | Yes/No    | null    | The user name of the account. |
-| password  | Yes/No    | null    | The password of the account. |
+| userName  | Yes       | null    | The user name of the user. |
+| password  | Yes       | null    | The password of the user. |
+
+Accessing this endpoint via a ```POST``` call allows for changing a users name
+ and/or password.
+
+POST: ```https://localhost/user```
+
+| Parameter | Required? | Default | Description |
+|-----------|-----------|---------|-------------|
+| apiKey    | Yes       | null    | The API key associated with the user. |
+| userName  | Yes/No    | null    | The user name of the user. |
+| password  | Yes/No    | null    | The password of the user. |
+
+Accessing this endpoint via a ```PUT``` call allows for creating a user.
+
+PUT: ```https://localhost/user```
+
+| Parameter | Required? | Default | Description |
+|-----------|-----------|---------|-------------|
+| userName  | Yes       | null    | The user name of the user. |
+| password  | Yes       | null    | The password of the user. |
+
+Accessing this endpoint via a ```DELETE``` call allows for deleting a user
+ and all data associated with the user.
+
+DELETE: ```https://localhost/user```
+
+| Parameter | Required? | Default | Description |
+|-----------|-----------|---------|-------------|
+| apiKey    | Yes       | null    | The API key associated with the user. |
 
 ##### Article API Call
 
