@@ -126,41 +126,77 @@ Accessing this endpoint via a ```DELETE``` call allows for deleting a user
 |-----------|-----------|---------|-------------|
 | apiKey    | Yes       | null    | The API key associated with the user. |
 
-##### Article API Call
+##### Preference Endpoint
 
-This endpoint marks the specified article as favorite, read, or neither.
+This endpoint allows for the retrieval of read and favourite articles. It
+ also allows setting an article as favorite, read, or both.
 
-Endpoint: ```https://localhost/article```
+Accessing this endpoint via a ```GET``` call allows for the retrieval of
+ articles that match the specified parameters.
+
+```GET: https://localhost/preference```
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
-| apiKey    | Yes       | null    | The API key associated with an account. |
+| apiKey    | Yes       | null    | The API key associated with the user. |
+| favorite  | No        | yes     | Yes or No. Retrieve articles that are favorite. |
+| read      | No        | yes     | Yes or No. Retrieve articles that were read. |
+
+Accessing this endpoint via a ```POST``` call allows for setting an
+ article as read, favorite, both, or neither.
+
+```POST: https://localhost/preference```
+
+| Parameter | Required? | Default | Description |
+|-----------|-----------|---------|-------------|
+| apiKey    | Yes       | null    | The API key associated with the user. |
 | articleId | Yes       | null    | The id of an article. |
 | favorite  | No        | null    | Yes or No. Marks the article as favorite or not. |
 | read      | No        | null    | Yes or No. Marks te article as read or not. |
 
-##### History API Call
+##### History Endpoint
 
-This endpoint returns the history of favored articles, read articles, or
- all API query's made with this API key.
+This endpoint allows for retrieval of all API calls made using the
+ specified API key.
 
-Endpoint: ```https://localhost/history```
+Accessing this endpoint via a ```GET``` call allows for the retrieval of
+all API calls made using the specified API key.
+
+```GET: https://localhost/history```
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
 | apiKey    | Yes       | null    | The API key associated with an account. |
-| type      | Yes       | all     | The type of history requested. Options: all, favorite, read |
 
-##### Recommendation API Call
+##### Recommendation Endpoint
 
-This endpoint return a single article based previously favored and read
+This endpoint returns a single article based previously favored and read
  articles.
 
-Endpoint: ```https://localhost/recommend```
+Accessing this endpoint via a ```GET``` call allows for the retrieval of
+ a single article based on previously favored and read articles.
+
+```GET: https://localhost/recommend```
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
-| apiKey    | Yes       | null    | The API key associated with an account. |
+| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#User-Endpoint) for how to obtain one.|
+
+##### Sources Endpoint
+
+This endpoint returns all the supported new sources.
+
+Accessing this endpoint via a ```GET``` call allows for the retrieval of
+ all of the supported news sources.
+
+```GET: https://localhost/sources```
+
+| Parameter | Required? | Default | Description |
+|-----------|-----------|---------|-------------|
+| apiKey    | Yes       | null    | The API key associated with the user. |
+| category  | No        | ALL     | The id of the category to get the sources for. See the [Category Endpoint][#] for supported categories. |
+| language  | No        | ALL     | The 2-letter ISO-639-1 code of the language to get the sources for. See the [Language Endpoint][#] for supported languages. |
+| country   | No        | ALL     | The 2-letter ISO 3166-1 code of the country to get the sources for. See the [Country Endpoint][#] for supported countries. |
 
 ### Web Interface
 
