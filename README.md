@@ -49,8 +49,8 @@ All of the features of Newsly will be available through the REST API as
     - The ability to see a history of what calls were made using a
     specific API key.
 
-### API
-#### Search Endpoint
+## API
+### Search Endpoint
 
 This endpoint allows finding articles by keyword(s).
 
@@ -61,10 +61,10 @@ Endpoint: ```https://localhost/search```
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
-| apiKey    | Yes       | null    | The API key of the user. |
+| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one. |
 | keywords  | Yes       | null    | The search keyword(s) to use. |
 
-#### Articles Endpoint
+### Articles Endpoint
 
 This endpoint allows for retrieval of articles based on specified
  constraints.
@@ -76,13 +76,13 @@ Accessing this endpoint a ```GET``` call allows for retrieval of
 
 | Parameter  | Required? | Default | Description |
 |------------|-----------|---------|-------------|
-| apiKey     | YES       | null    | The API key of the user. |
-| source     | No        | random  | The news source to use. See [News Sources][#] for more information. |
-| sortBy     | No        | top     | Which list of articles to retrieve from the source. See [News Sources][#] for more information. |
-| category   | No        | random  | The category to pick the articles from if the source is random. See [Categories][#] for more information. |
+| apiKey     | YES       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one. |
+| source     | No        | random  | The id of the news source to use. See the [Sources Endpoint](#sources-endpoint) for supported sources. |
+| sortBy     | No        | top     | The article list to pull from the source. The options are "top", "latest", and "popular". See the [Sources Endpoint](#sources-endpoint) for more information. |
+| category   | No        | random  | The category to pick the articles from if the source is random. See the [Categories Endpoint](#categories-endpoint) for supported categories. |
 | resultsAmt | No        | 0       | The amount of articles to display in the results. 0 for as many as are available. |
 
-#### User Endpoint
+### User Endpoint
 
 This endpoint allows for the creation of a user, change of a users
  password, and retrieval of a users API key.
@@ -104,7 +104,7 @@ Accessing this endpoint via a ```POST``` call allows for changing a users name
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
-| apiKey    | Yes       | null    | The API key associated with the user. |
+| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one. |
 | userName  | Yes/No    | null    | The new user name of the user. |
 | password  | Yes/No    | null    | The new password of the user. |
 
@@ -124,9 +124,9 @@ Accessing this endpoint via a ```DELETE``` call allows for deleting a user
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
-| apiKey    | Yes       | null    | The API key associated with the user. |
+| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one. |
 
-##### Preference Endpoint
+### Preference Endpoint
 
 This endpoint allows for the retrieval of read and favourite articles. It
  also allows setting an article as favorite, read, or both.
@@ -138,7 +138,7 @@ Accessing this endpoint via a ```GET``` call allows for the retrieval of
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
-| apiKey    | Yes       | null    | The API key associated with the user. |
+| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one. |
 | favorite  | No        | yes     | Yes or No. Retrieve articles that are favorite. |
 | read      | No        | yes     | Yes or No. Retrieve articles that were read. |
 
@@ -149,12 +149,12 @@ Accessing this endpoint via a ```POST``` call allows for setting an
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
-| apiKey    | Yes       | null    | The API key associated with the user. |
+| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one. |
 | articleId | Yes       | null    | The id of an article. |
 | favorite  | No        | null    | Yes or No. Marks the article as favorite or not. |
 | read      | No        | null    | Yes or No. Marks te article as read or not. |
 
-##### History Endpoint
+### History Endpoint
 
 This endpoint allows for retrieval of all API calls made using the
  specified API key.
@@ -166,9 +166,9 @@ all API calls made using the specified API key.
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
-| apiKey    | Yes       | null    | The API key associated with an account. |
+| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one. |
 
-##### Recommendation Endpoint
+### Recommendation Endpoint
 
 This endpoint returns a single article based previously favored and read
  articles.
@@ -180,9 +180,9 @@ Accessing this endpoint via a ```GET``` call allows for the retrieval of
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
-| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#User-Endpoint) for how to obtain one.|
+| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one.|
 
-##### Sources Endpoint
+### Sources Endpoint
 
 This endpoint returns all the supported new sources.
 
@@ -193,10 +193,49 @@ Accessing this endpoint via a ```GET``` call allows for the retrieval of
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
-| apiKey    | Yes       | null    | The API key associated with the user. |
-| category  | No        | ALL     | The id of the category to get the sources for. See the [Category Endpoint][#] for supported categories. |
-| language  | No        | ALL     | The 2-letter ISO-639-1 code of the language to get the sources for. See the [Language Endpoint][#] for supported languages. |
-| country   | No        | ALL     | The 2-letter ISO 3166-1 code of the country to get the sources for. See the [Country Endpoint][#] for supported countries. |
+| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one. |
+| category  | No        | ALL     | The id of the category to get the sources for. See the [Category Endpoint](#category-endpoint) for supported categories. |
+| language  | No        | ALL     | The 2-letter ISO-639-1 code of the language to get the sources for. See the [Language Endpoint](#language-endpoint) for supported languages. |
+| country   | No        | ALL     | The 2-letter ISO 3166-1 code of the country to get the sources for. See the [Country Endpoint](#country-endpoint) for supported countries. |
+
+### Category Endpoint
+
+This endpoint returns all the supported categories of news sources.
+
+Accessing this endpoint via a ```GET``` call allows for the retrieval of
+ all of the supported categories of news sources.
+
+```GET: https://localhost/category```
+
+| Parameter | Required? | Default | Description |
+|-----------|-----------|---------|-------------|
+| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one.|
+
+### Language Endpoint
+
+This endpoint returns all the supported languages of news sources.
+
+Accessing this endpoint via a ```GET``` call allows for the retrieval of
+ all of the supported languages of news sources.
+
+```GET: https://localhost/language```
+
+| Parameter | Required? | Default | Description |
+|-----------|-----------|---------|-------------|
+| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one.|
+
+### Country Endpoint
+
+This endpoint returns all the supported countries of news sources.
+
+Accessing this endpoint via a ```GET``` call allows for the retrieval of
+ all of the supported countries of news sources.
+
+```GET: https://localhost/country```
+
+| Parameter | Required? | Default | Description |
+|-----------|-----------|---------|-------------|
+| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one.|
 
 ### Web Interface
 
