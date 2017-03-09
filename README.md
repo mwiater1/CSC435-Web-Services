@@ -24,7 +24,7 @@ This application is built as a semester long project for my CSC435 Web
 ### Features
 All of the features of Newsly will be available through the REST API as
  well as the Web UI. The features listed below are ones not offered by
- the underlying [New API][1]. All of the features of the underlying API
+ the underlying [News API][1]. All of the features of the underlying API
  will be available by default from Newsly.
 
 - Article search.
@@ -84,7 +84,7 @@ This endpoint allows for the creation of a user, change of a users
 Accessing this endpoint via a ```GET``` call allows for retrieval of a users
  API key.
 
-GET: ```https://localhost/user```
+```GET: https://localhost/user```
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
@@ -94,17 +94,17 @@ GET: ```https://localhost/user```
 Accessing this endpoint via a ```POST``` call allows for changing a users name
  and/or password.
 
-POST: ```https://localhost/user```
+```POST: https://localhost/user```
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
 | apiKey    | Yes       | null    | The API key associated with the user. |
-| userName  | Yes/No    | null    | The user name of the user. |
-| password  | Yes/No    | null    | The password of the user. |
+| userName  | Yes/No    | null    | The new user name of the user. |
+| password  | Yes/No    | null    | The new password of the user. |
 
 Accessing this endpoint via a ```PUT``` call allows for creating a user.
 
-PUT: ```https://localhost/user```
+```PUT: https://localhost/user```
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
@@ -114,7 +114,7 @@ PUT: ```https://localhost/user```
 Accessing this endpoint via a ```DELETE``` call allows for deleting a user
  and all data associated with the user.
 
-DELETE: ```https://localhost/user```
+```DELETE: https://localhost/user```
 
 | Parameter | Required? | Default | Description |
 |-----------|-----------|---------|-------------|
