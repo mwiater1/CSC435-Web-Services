@@ -1,4 +1,4 @@
 package com.mateuszwiater.csc435.controller;
 
-public class ArticleController {
+public class CountryController {
 }
