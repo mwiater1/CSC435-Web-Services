@@ -426,7 +426,7 @@ Accessing this endpoint via a ```GET``` call allows for the retrieval of
 
 Example Request:
 ```
-https://localhost/recommend?apiKey=fcb3e9d9-f5aa-46d8-8097-095d5b4b0420
+https://localhost/sources?apiKey=fcb3e9d9-f5aa-46d8-8097-095d5b4b0420
 ```
 
 Example Response:
