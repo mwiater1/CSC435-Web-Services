@@ -1,66 +1,65 @@
 package com.mateuszwiater.csc435.model;
 
-/*
-CREATE TABLE USERS (
-    ID int NOT NULL AUTO_INCREMENT,
-    USERNAME VARCHAR(255) NOT NULL,
-    PASSWORD VARCHAR(255) NOT NULL,
-    APIKEY UUID NOT NULL,
-    PRIMARY KEY (ID)
-);
- */
-
 import com.mateuszwiater.csc435.db.DatabaseConnector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.mateuszwiater.csc435.db.SqlResponse;
+import com.mateuszwiater.csc435.db.SqlStatus;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.List;
 import java.util.UUID;
 
-import static com.mateuszwiater.csc435.model.Model.Status.*;
+import static com.mateuszwiater.csc435.util.HttpStatus.*;
 
 public class User {
-    private static Logger logger = LoggerFactory.getLogger(User.class);
-    private final String userName, apiKey;
-    private String password;
+    private String userName, password, apiKey;
 
-    public static Model<User> getUser(final UUID apiKey) {
-        final String sql = String.format("SELECT (USERNAME, PASSWORD, APIKEY) " +
+    public static ModelResponse<User> getUser(final UUID apiKey) {
+        final String query = String.format("SELECT * " +
                 "FROM USERS " +
                 "WHERE APIKEY='%s';", apiKey);
 
-        return getUser(sql);
+        return getUser(query);
     }
 
-    public static Model<User> getUser(final String userName, final String password) {
-        final String sql = String.format("SELECT (USERNAME, PASSWORD, APIKEY) " +
+    public static ModelResponse<User> getUser(final String userName, final String password) {
+        final String query = String.format("SELECT * " +
                 "FROM USERS " +
                 "WHERE USERNAME='%s' " +
                 "AND PASSWORD='%s';", userName, password);
 
-        return getUser(sql);
+        return getUser(query);
     }
 
-    private static Model<User> getUser(final String sql) {
-        try (final Statement stmt = DatabaseConnector.getConnection().createStatement();
-             final ResultSet rs = stmt.executeQuery(sql)) {
+    private static ModelResponse<User> getUser(final String sql) {
+        final SqlResponse res = DatabaseConnector.runQuery(sql);
 
-            // Return an error if the result set is empty.
-            if(!rs.next()) {
-                return new Model<>(FAIL,"No User Found With That Information.");
+        // Make sure the query did not error out
+        if (res.getStatus() == SqlStatus.OK) {
+            // Check to see if the query returned a user
+            if (res.getData().isPresent()) {
+                final List<String> row = res.getData().get().get(0);
+                final User user = new User(row.get(0), row.get(1), row.get(2));
+                return new ModelResponse<>(OK, user, "");
+            } else {
+                return new ModelResponse<>(NOT_FOUND, null, "User not found.");
             }
+        } else {
+            return new ModelResponse<>(INTERNAL_SERVER_ERROR, null, "");
+        }
+    }
 
-            // Return the user from the database.
-            final String apiKey = rs.getString("APIKEY");
-            final String userName = rs.getString("USERNAME");
-            final String password = rs.getString("PASSWORD");
-            return new Model<>(new User(userName, password, apiKey));
+    public static ModelResponse<User> createUser(final String userName, final String password) {
+        final String apiKey = UUID.randomUUID().toString();
+        final String query = String.format("INSERT INTO USERS (USERNAME,PASSWORD,APIKEY) VALUES ('%s','%s','%s')",
+                userName, password, apiKey);
 
-        } catch (SQLException e) {
-            logger.error("SQL Error when retrieving User", e);
-            return new Model<>(FAIL,"Internal Server Error!");
+        final SqlResponse res = DatabaseConnector.runQuery(query);
+
+        if (res.getStatus() == SqlStatus.OK) {
+            return new ModelResponse<>(OK, new User(userName, password, apiKey), "Successfully created user.");
+        } else if (res.getStatus() == SqlStatus.PRIMARY_KEY_VIOLATION) {
+            return new ModelResponse<>(CONFLICT, null, "Username '" + userName + "' unavailable. Try a different one.");
+        } else {
+            return new ModelResponse<>(INTERNAL_SERVER_ERROR, null, "Error creating user. Try again.");
         }
     }
 
@@ -70,27 +69,55 @@ public class User {
         this.password = password;
     }
 
-    public Model<User> delete() {
-        final String sql = String.format("DELETE FROM USERS WHERE APIKEY='%s'", apiKey);
+    public ModelResponse<User> delete() {
+        final String query = String.format("DELETE FROM USERS WHERE APIKEY='%s'", apiKey);
 
-        try (final Statement stmt = DatabaseConnector.getConnection().createStatement();
-             final ResultSet rs = stmt.executeQuery(sql)) {
-            return new Model<>(OK,"User Removed.");
-        } catch (SQLException e) {
-            logger.error("SQL Error when deleting User", e);
-            return new Model<>(FAIL,"Internal Server Error!");
+        final SqlResponse res = DatabaseConnector.runQuery(query);
+
+        if (res.getStatus() == SqlStatus.OK) {
+            return new ModelResponse<>(OK, null, "User deleted");
+        } else {
+            return new ModelResponse<>(INTERNAL_SERVER_ERROR, null, "Error deleting user. Try again.");
         }
     }
 
-    public Model<User> setPassword(final String password) {
-        final String sql = String.format("UPDATE USERS SET PASSWORD='%s' WHERE APIKEY='%s'", password, apiKey);
+    public ModelResponse<User> setPassword(final String password) {
+        final String query = String.format("UPDATE USERS SET PASSWORD='%s' WHERE APIKEY='%s'", password, apiKey);
 
-        try (final Statement stmt = DatabaseConnector.getConnection().createStatement();
-             final ResultSet rs = stmt.executeQuery(sql)) {
-            return new Model<>(OK,"Password Changed.", this);
-        } catch (SQLException e) {
-            logger.error("SQL Error when deleting User", e);
-            return new Model<>(FAIL,"Internal Server Error!");
+        final SqlResponse res = DatabaseConnector.runQuery(query);
+
+        if (res.getStatus() == SqlStatus.OK) {
+            this.password = password;
+            return new ModelResponse<>(OK, this, "Successfully changed.");
+        } else {
+            return new ModelResponse<>(INTERNAL_SERVER_ERROR, null, "Error changing password. Try again.");
         }
+    }
+
+    public ModelResponse<User> setUserName(final String userName) {
+        final String query = String.format("UPDATE USERS SET USERNAME='%s' WHERE APIKEY='%s'", userName, apiKey);
+
+        final SqlResponse res = DatabaseConnector.runQuery(query);
+
+        if (res.getStatus() == SqlStatus.OK) {
+            this.userName = userName;
+            return new ModelResponse<>(OK, this, "Successfully changed.");
+        } else if (res.getStatus() == SqlStatus.PRIMARY_KEY_VIOLATION) {
+            return new ModelResponse<>(CONFLICT, this, "Username '" + userName + "' unavailable. Try a different one.");
+        } else {
+            return new ModelResponse<>(INTERNAL_SERVER_ERROR, null, "Error changing username. Try again.");
+        }
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }
