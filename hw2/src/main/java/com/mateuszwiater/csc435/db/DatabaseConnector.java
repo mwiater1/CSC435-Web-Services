@@ -1,15 +1,14 @@
 package com.mateuszwiater.csc435.db;
 
-import com.mateuszwiater.csc435.model.ModelResponse;
-import com.mateuszwiater.csc435.model.User;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 
 public class DatabaseConnector {
     private static Logger logger = LoggerFactory.getLogger(DatabaseConnector.class);
@@ -17,10 +16,7 @@ public class DatabaseConnector {
     private Connection connection;
 
     public static void main(String[] args) {
-        bootstrap(getConnection());
-
-        Locale l = new Locale("", "au");
-        System.out.println("Country: " + l.getDisplayCountry());
+        bootstrap(getInstance().getConnection());
     }
 
     private static void bootstrap(final Connection con) {
@@ -53,6 +49,18 @@ public class DatabaseConnector {
                         "SORTBYS VARCHAR(255) NOT NULL," +
                         "PRIMARY KEY (ID));");
 
+                // Create the Articles table
+                st.addBatch("CREATE TABLE ARTICLES (" +
+                        "ID int NOT NULL AUTO_INCREMENT," +
+                        "AUTHOR VARCHAR(255) NOT NULL," +
+                        "TITLE VARCHAR(255) NOT NULL," +
+                        "DESCRIPTION VARCHAR(255) NOT NULL," +
+                        "URL VARCHAR(255) NOT NULL," +
+                        "URLTOIMAGE VARCHAR(255) NOT NULL," +
+                        "SOURCE VARCHAR(255) NOT NULL," +
+                        "PUBLISHEDAT VARCHAR(255) NOT NULL," +
+                        "PRIMARY KEY (ID));");
+
                 // Add dummy users
                 st.addBatch("INSERT INTO " +
                         "USERS (USERNAME,PASSWORD,APIKEY)" +
@@ -65,7 +73,6 @@ public class DatabaseConnector {
                 st.executeBatch();
 
                 System.out.println("Done!");
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,9 +82,11 @@ public class DatabaseConnector {
 
     private DatabaseConnector() {
         try {
-            Class.forName("org.h2.Driver");
-//            connection = DriverManager.getConnection("jdbc:h2:file:~/Newsly", "mwiater", "csc435pass");
-            connection = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/Newsly", "mwiater", "csc435pass");
+            final Gson g = new Gson();
+            final Reader config = new InputStreamReader(getClass().getClassLoader().getResourceAsStream("config.json"));
+            final DatabaseConfig db = g.fromJson(config, new TypeToken<DatabaseConfig>(){}.getType());
+            Class.forName(db.getDriver());
+            connection = DriverManager.getConnection(db.getUrl(), db.getUser(), db.getPassword());
         } catch (ClassNotFoundException e) {
             logger.error("H2 Driver Class Not Found!", e);
             System.exit(-1);
@@ -86,17 +95,22 @@ public class DatabaseConnector {
         }
     }
 
-    private static Connection getConnection() {
+    private static DatabaseConnector getInstance() {
         if (instance == null) {
             instance = new DatabaseConnector();
         }
-        return instance.connection;
+
+        return instance;
     }
 
-    public static SqlResponse runQuery(final String query) {
+    private Connection getConnection() {
+        return connection;
+    }
+
+    public static Optional<List<List<String>>> runQuery(final String query) throws SQLException {
         List<List<String>> table = new ArrayList<>();
 
-        try (final Statement stmt = getConnection().createStatement()) {
+        try (final Statement stmt = getInstance().getConnection().createStatement()) {
             // Check if there is a ResultSet
             if (stmt.execute(query)) {
                 // Convert the ResultSet to List<List<String>>
@@ -109,19 +123,38 @@ public class DatabaseConnector {
                         table.add(row);
                     }
 
-                    return new SqlResponse(SqlStatus.OK, table.size() == 0 ? null : table, "");
+                    return table.size() == 0 ? Optional.empty() : Optional.of(table);
                 }
             } else {
-                return new SqlResponse(SqlStatus.OK, null, "");
+                return Optional.empty();
             }
-        } catch (SQLException e) {
-            // Check for Primary Key Violation
-            if(e.getSQLState().equals("23505")) {
-                return new SqlResponse(SqlStatus.PRIMARY_KEY_VIOLATION, null, "");
-            } else {
-                logger.error("SQL Error", e);
-                return new SqlResponse(SqlStatus.SQL_ERROR, null, "");
-            }
+        }
+    }
+
+    private static class DatabaseConfig {
+        private String url, user, driver, password;
+
+        public DatabaseConfig(final String driver, final String url, final String user, final String password) {
+            this.url = url;
+            this.user = user;
+            this.driver = driver;
+            this.password = password;
+        }
+
+        String getUrl() {
+            return url;
+        }
+
+        String getUser() {
+            return user;
+        }
+
+        String getDriver() {
+            return driver;
+        }
+
+        String getPassword() {
+            return password;
         }
     }
 }
