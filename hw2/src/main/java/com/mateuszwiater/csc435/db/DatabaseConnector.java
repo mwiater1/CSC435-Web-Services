@@ -61,14 +61,14 @@ public class DatabaseConnector {
                         "PUBLISHEDAT VARCHAR(255) NOT NULL," +
                         "PRIMARY KEY (ID));");
 
-                // Add dummy users
-                st.addBatch("INSERT INTO " +
-                        "USERS (USERNAME,PASSWORD,APIKEY)" +
-                        "VALUES ('mwiater','abc123','" + UUID.randomUUID() + "');");
-
-                st.addBatch("INSERT INTO " +
-                        "USERS (USERNAME,PASSWORD,APIKEY)" +
-                        "VALUES ('awiater','123abc','" + UUID.randomUUID() + "');");
+                st.addBatch("CREATE TABLE HISTORY (" +
+                        "ID int NOT NULL AUTO_INCREMENT," +
+                        "APIKEY UUID NOT NULL," +
+                        "ENDPOINT VARCHAR(255) NOT NULL," +
+                        "REQUESTTYPE VARCHAR(255) NOT NULL," +
+                        "REQUESTTIME VARCHAR(255) NOT NULL," +
+                        "PARAMETERS VARCHAR(255) NOT NULL," +
+                        "PRIMARY KEY (ID));");
 
                 st.executeBatch();
 
