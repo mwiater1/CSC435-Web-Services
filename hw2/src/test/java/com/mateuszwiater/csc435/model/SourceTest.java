@@ -30,7 +30,6 @@ public class SourceTest {
                 "PRIMARY KEY (ID));");
 
         // Create the test sources
-        Gson g = new Gson();
         final Map<String, String> urlsToLogos = new HashMap<>();
         urlsToLogos.put("small","http://example.com/small");
         urlsToLogos.put("medium","http://example.com/medium");
