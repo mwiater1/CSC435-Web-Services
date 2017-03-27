@@ -1,14 +1,13 @@
 package com.mateuszwiater.csc435.model;
 
 import com.mateuszwiater.csc435.db.DatabaseConnector;
-import com.mateuszwiater.csc435.db.SqlResponse;
-import com.mateuszwiater.csc435.db.SqlStatus;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import static com.mateuszwiater.csc435.util.HttpStatus.*;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Language {
     private final String name, code;
@@ -18,17 +17,27 @@ public class Language {
         this.name = new Locale(code).getDisplayLanguage();
     }
 
-    public static ModelResponse<List<Language>> getLanguages() {
+    public static Optional<Language> getLanguage(final String language) throws SQLException {
+        final String query = String.format("SELECT DISTINCT LANGUAGE FROM SOURCES WHERE LANGUAGE = '%s';", language);
+
+        final Optional<List<List<String>>> res = DatabaseConnector.runQuery(query);
+
+        if (res.isPresent()) {
+            return Optional.of(new Language(language));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public static List<Language> getLanguages() throws SQLException {
         final String query = "SELECT DISTINCT LANGUAGE FROM SOURCES;";
 
-        final SqlResponse res = DatabaseConnector.runQuery(query);
+        final Optional<List<List<String>>> res = DatabaseConnector.runQuery(query);
 
-        if(res.getStatus() == SqlStatus.OK) {
-            final List<Language> languages = new ArrayList<>();
-            res.getData().ifPresent(l -> l.stream().map(l2 -> l2.get(0)).forEach(s -> languages.add(new Language(s))));
-            return new ModelResponse<>(OK, languages, "");
+        if (res.isPresent()) {
+            return res.get().stream().map(l -> l.get(0)).map(Language::new).collect(Collectors.toList());
         } else {
-            return new ModelResponse<>(INTERNAL_SERVER_ERROR, null, "Error retrieving supported languages. Try again.");
+            return new ArrayList<>();
         }
     }
 

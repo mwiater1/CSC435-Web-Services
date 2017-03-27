@@ -1,15 +1,13 @@
 package com.mateuszwiater.csc435.model;
 
 import com.mateuszwiater.csc435.db.DatabaseConnector;
-import com.mateuszwiater.csc435.db.SqlResponse;
-import com.mateuszwiater.csc435.db.SqlStatus;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import static com.mateuszwiater.csc435.util.HttpStatus.INTERNAL_SERVER_ERROR;
-import static com.mateuszwiater.csc435.util.HttpStatus.OK;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Country {
     private final String name, code;
@@ -19,17 +17,27 @@ public class Country {
         this.name = new Locale("", code).getDisplayCountry();
     }
 
-    public static ModelResponse<List<Country>> getCountries() {
+    public static Optional<Country> getCountry(final String country) throws SQLException {
+        final String query = String.format("SELECT DISTINCT COUNTRY FROM SOURCES WHERE COUNTRY = '%s';", country);
+
+        final Optional<List<List<String>>> res = DatabaseConnector.runQuery(query);
+
+        if (res.isPresent()) {
+            return Optional.of(new Country(country));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public static List<Country> getCountries() throws SQLException {
         final String query = "SELECT DISTINCT COUNTRY FROM SOURCES;";
 
-        final SqlResponse res = DatabaseConnector.runQuery(query);
+        final Optional<List<List<String>>> res = DatabaseConnector.runQuery(query);
 
-        if(res.getStatus() == SqlStatus.OK) {
-            final List<Country> countries = new ArrayList<>();
-            res.getData().ifPresent(l -> l.stream().map(l2 -> l2.get(0)).forEach(s -> countries.add(new Country(s))));
-            return new ModelResponse<>(OK, countries, "");
+        if (res.isPresent()) {
+            return res.get().stream().map(l -> l.get(0)).map(Country::new).collect(Collectors.toList());
         } else {
-            return new ModelResponse<>(INTERNAL_SERVER_ERROR, null, "Error retrieving supported countries. Try again.");
+            return new ArrayList<>();
         }
     }
 

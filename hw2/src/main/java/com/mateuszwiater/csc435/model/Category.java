@@ -1,14 +1,12 @@
 package com.mateuszwiater.csc435.model;
 
 import com.mateuszwiater.csc435.db.DatabaseConnector;
-import com.mateuszwiater.csc435.db.SqlResponse;
-import com.mateuszwiater.csc435.db.SqlStatus;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.mateuszwiater.csc435.util.HttpStatus.INTERNAL_SERVER_ERROR;
-import static com.mateuszwiater.csc435.util.HttpStatus.OK;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Category {
     private final String name;
@@ -17,17 +15,27 @@ public class Category {
         this.name = name;
     }
 
-    public static ModelResponse<List<Category>> getCategories() {
+    public static Optional<Category> getCategory(final String category) throws SQLException {
+        final String query = String.format("SELECT DISTINCT CATEGORY FROM SOURCES WHERE CATEGORY = '%s';", category);
+
+        final Optional<List<List<String>>> res = DatabaseConnector.runQuery(query);
+
+        if (res.isPresent()) {
+            return Optional.of(new Category(category));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public static List<Category> getCategories() throws SQLException {
         final String query = "SELECT DISTINCT CATEGORY FROM SOURCES;";
 
-        final SqlResponse res = DatabaseConnector.runQuery(query);
+        final Optional<List<List<String>>> res = DatabaseConnector.runQuery(query);
 
-        if (res.getStatus() == SqlStatus.OK) {
-            final List<Category> categories = new ArrayList<>();
-            res.getData().ifPresent(l -> l.stream().map(l2 -> l2.get(0)).forEach(s -> categories.add(new Category(s))));
-            return new ModelResponse<>(OK, categories, "");
+        if (res.isPresent()) {
+            return res.get().stream().map(l -> l.get(0)).map(Category::new).collect(Collectors.toList());
         } else {
-            return new ModelResponse<>(INTERNAL_SERVER_ERROR, null, "Error retrieving supported categories. Try again.");
+            return new ArrayList<>();
         }
     }
 
