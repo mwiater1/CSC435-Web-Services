@@ -1,6 +1,5 @@
 package com.mateuszwiater.csc435.model;
 
-import com.google.gson.Gson;
 import com.mateuszwiater.csc435.db.DatabaseConnector;
 import org.junit.After;
 import org.junit.Before;
