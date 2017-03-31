@@ -70,6 +70,15 @@ public class DatabaseConnector {
                         "PARAMETERS VARCHAR(255) NOT NULL," +
                         "PRIMARY KEY (ID));");
 
+                st.addBatch("CREATE TABLE PREFERENCES (" +
+                        "ID int NOT NULL AUTO_INCREMENT," +
+                        "APIKEY UUID NOT NULL," +
+                        "ENDPOINT VARCHAR(255) NOT NULL," +
+                        "REQUESTTYPE VARCHAR(255) NOT NULL," +
+                        "REQUESTTIME VARCHAR(255) NOT NULL," +
+                        "PARAMETERS VARCHAR(255) NOT NULL," +
+                        "PRIMARY KEY (ID));");
+
                 st.executeBatch();
 
                 System.out.println("Done!");
