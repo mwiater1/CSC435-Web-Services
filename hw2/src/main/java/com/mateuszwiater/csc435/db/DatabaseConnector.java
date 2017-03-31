@@ -30,7 +30,6 @@ public class DatabaseConnector {
                 System.out.print("Bootstrapping...");
                 Statement st = con.createStatement();
                 st.addBatch("CREATE TABLE USERS (" +
-//                        "ID int NOT NULL AUTO_INCREMENT," +
                         "USERNAME VARCHAR(255) NOT NULL," +
                         "PASSWORD VARCHAR(255) NOT NULL," +
                         "APIKEY UUID NOT NULL," +
@@ -107,6 +106,7 @@ public class DatabaseConnector {
     private static DatabaseConnector getInstance() {
         if (instance == null) {
             instance = new DatabaseConnector();
+            bootstrap(instance.getConnection());
         }
 
         return instance;
