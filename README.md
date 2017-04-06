@@ -27,10 +27,8 @@ All of the features of Newsly will be available through the REST API as
  the underlying [News API][1]. All of the features of the underlying API
  will be available by default from Newsly.
 
-- Article search.
-    - The ability to request an article(s) by a keyword(s).
-- Random article.
-    - The ability to request a random article with no specification or
+- Random articles.
+    - The ability to request random articles with no specification or
     by outlet/genera.
 - User registration.
     - The ability to register a user to store personalized information.
@@ -45,59 +43,8 @@ All of the features of Newsly will be available through the REST API as
     - The ability to mark an article as read and not have that article
     show up in future results. This can only be done by a registered
     user.
-- API Use History
-    - The ability to see a history of what calls were made using a
-    specific API key.
 
 ## API
-### Search Endpoint
-
-This endpoint allows finding articles by keyword(s).
-
-Accessing this endpoint via a ```GET``` call allows for a retrieval of
-a list of articles related to the keyword(s).
-
-```GET: https://localhost/search```
-
-| Parameter | Required? | Default | Description |
-|-----------|-----------|---------|-------------|
-| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one. |
-| keywords  | Yes       | null    | The search keyword(s) to use. |
-
-Example Request:
-```
-https://localhost/articles?apiKey=fcb3e9d9-f5aa-46d8-8097-095d5b4b0420&keywords=that
-```
-
-
-Example Response:
-```
-{
-   "status":"ok",
-   "message":"",
-   "articles":[
-      {
-         "author":"Napier Lopez",
-         "title":"Report: WhatsApp begins testing a way to actually make money",
-         "description":"WhatsApp has begun testing a system that allows businesses to message consumers directly, according to a report by Reuters. In other words, WhatsApp is getting ready to actually make real money. If you recall, WhatsApp used to charge an annual $0.99 membership fee, but abandoned it a couple of years after being acquired by Facebook for …",
-         "url":"https://thenextweb.com/facebook/2017/03/09/report-whatsapp-begins-testing-way-actually-make-money/",
-         "urlToImage":"https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2015/04/whatsapp.jpg",
-         "source":"the-next-web",
-         "publishedAt":"2017-03-09T00:11:46Z"
-      },
-      {
-         "author":"Bryan Clark",
-         "title":"Review: Insta360 Nano turns your iPhone into a portable VR video rig",
-         "description":"VR video is the next big thing, but most of us still think that requires an expensive rig. It doesn’t. Insta360 Nano turns your iPhone into a 360 degree camera with a simple app and a Lightning-connected dual-lens system. It’s short on bulk, but packs a ton of cool features and superb image quality into …",
-         "url":"https://thenextweb.com/gadgets/2017/03/09/review-insta360-nano-turns-your-iphone-into-a-portable-vr-video-rig/",
-         "urlToImage":"https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2017/03/360nano3.jpg",
-         "source":"the-next-web",
-         "publishedAt":"2017-03-09T00:02:16Z"
-      }
-   ]
-}
-```
-
 ### Articles Endpoint
 
 This endpoint allows for retrieval of articles based on specified
@@ -114,7 +61,6 @@ Accessing this endpoint a ```GET``` call allows for retrieval of
 | source     | No        | random  | The id of the news source to use. See the [Sources Endpoint](#sources-endpoint) for supported sources. |
 | sortBy     | No        | top     | The article list to pull from the source. The options are "top", "latest", and "popular". See the [Sources Endpoint](#sources-endpoint) for more information. |
 | category   | No        | random  | The category to pick the articles from if the source is random. See the [Categories Endpoint](#categories-endpoint) for supported categories. |
-| resultsAmt | No        | 0       | The amount of articles to display in the results. 0 for as many as are available. |
 
 Example Request:
 ```
@@ -307,8 +253,8 @@ Accessing this endpoint via a ```POST``` call allows for setting an
 |-----------|-----------|---------|-------------|
 | apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one. |
 | articleId | Yes       | null    | The id of an article. |
-| favorite  | No        | null    | Yes or No. Marks the article as favorite or not. |
-| read      | No        | null    | Yes or No. Marks te article as read or not. |
+| favorite  | No        | null    | True or False. Marks the article as favorite or not. |
+| read      | No        | null    | True or False. Marks te article as read or not. |
 
 Example Request:
 ```
@@ -320,53 +266,6 @@ Example Response:
 {
    "status":"ok",
    "message":""
-}
-```
-
-### History Endpoint
-
-This endpoint allows for retrieval of all API calls made using the
- specified API key.
-
-Accessing this endpoint via a ```GET``` call allows for the retrieval of
-all API calls made using the specified API key.
-
-```GET: https://localhost/history```
-
-| Parameter | Required? | Default | Description |
-|-----------|-----------|---------|-------------|
-| apiKey    | Yes       | null    | Your API key. See [User Endpoint](#user-endpoint) for how to obtain one. |
-
-Example Request:
-```
-https://localhost/history?apiKey=fcb3e9d9-f5aa-46d8-8097-095d5b4b0420
-```
-
-Example Response:
-```
-{
-   "status":"ok",
-   "message":"",
-   "history":[
-       {
-           "endpoint":"history",
-           "requestType":"get",
-           "requestTime":"2017-03-09T00:02:16Z",
-           "parameters":{
-               "apiKey":"fcb3e9d9-f5aa-46d8-8097-095d5b4b0420"
-           }
-       },
-       {
-          "endpoint":"preference",
-          "requestType":"get",
-          "requestTime":"2017-03-09T00:02:16Z",
-          "parameters":{
-              "apiKey":"fcb3e9d9-f5aa-46d8-8097-095d5b4b0420",
-              "favorite":"true",
-              "read":"true"
-          }
-      }
-   ]
 }
 ```
 
