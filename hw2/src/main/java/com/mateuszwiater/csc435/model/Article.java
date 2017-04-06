@@ -9,9 +9,10 @@ import java.util.Optional;
 
 public class Article {
     private String id;
-    private final String author, title, description, url, urlToImage, source, publishedAt;
+    private final String author, title, description, url, urlToImage, source, sortBy, publishedAt;
 
-    public Article(String author, String title, String description, String url, String urlToImage, String source, String publishedAt) {
+    public Article(String author, String title, String description, String url, String urlToImage, String source, String sortBy, String publishedAt) {
+        this.sortBy = sortBy;
         this.author = author;
         this.title = title;
         this.description = description;
@@ -23,14 +24,14 @@ public class Article {
 
     public void save() throws SQLException {
         if(id == null) {
-            final String query = String.format("INSERT INTO ARTICLES (AUTHOR,TITLE,DESCRIPTION,URL,URLTOIMAGE,SOURCE,PUBLISHEDAT) VALUES ('%s','%s','%s','%s','%s','%s','%s');",
-                    author, title, description, url, urlToImage, source, publishedAt);
+            final String query = String.format("INSERT INTO ARTICLES (AUTHOR,TITLE,DESCRIPTION,URL,URLTOIMAGE,SOURCE,SORTBY,PUBLISHEDAT) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s');",
+                    author, title.replace("'","''"), description.replace("'","''"), url, urlToImage, source, sortBy, publishedAt);
             DatabaseConnector.runQuery(query);
         }
     }
 
     public static Optional<Article> getArticle(final String id) throws SQLException {
-        final String query = String.format("SELECT ID, AUTHOR, TITLE, DESCRIPTION, URL, URLTOIMAGE, SOURCE, PUBLISHEDAT FROM ARTICLES WHERE ID = '%s';",
+        final String query = String.format("SELECT ID, AUTHOR, TITLE, DESCRIPTION, URL, URLTOIMAGE, SOURCE, SORTBY, PUBLISHEDAT FROM ARTICLES WHERE ID = '%s';",
                 id);
 
         Optional<List<List<String>>> res = DatabaseConnector.runQuery(query);
@@ -43,8 +44,8 @@ public class Article {
     }
 
     public static List<Article> getArticles(final Source source, final String sortBy) throws SQLException {
-        final String query = String.format("SELECT ID, AUTHOR, TITLE, DESCRIPTION, URL, URLTOIMAGE, SOURCE, PUBLISHEDAT FROM ARTICLES WHERE SOURCE = '%s' AND SORTBY = '%s';",
-                source, sortBy);
+        final String query = String.format("SELECT ID, AUTHOR, TITLE, DESCRIPTION, URL, URLTOIMAGE, SOURCE, SORTBY, PUBLISHEDAT FROM ARTICLES WHERE SOURCE = '%s' AND SORTBY = '%s';",
+                source.getId(), sortBy);
 
         Optional<List<List<String>>> res = DatabaseConnector.runQuery(query);
         final List<Article> articles = new ArrayList<>();
@@ -57,7 +58,7 @@ public class Article {
     }
 
     private static Article toArticle(final List<String> list) {
-        final Article article = new Article(list.get(1),list.get(2),list.get(3),list.get(4),list.get(5),list.get(6),list.get(7));
+        final Article article = new Article(list.get(1),list.get(2),list.get(3),list.get(4),list.get(5),list.get(6),list.get(7),list.get(8));
         article.id = list.get(0);
         return article;
     }
@@ -94,5 +95,7 @@ public class Article {
         return publishedAt;
     }
 
-
+    public String getSortBy() {
+        return sortBy;
+    }
 }

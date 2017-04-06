@@ -7,4 +7,36 @@
         <servlet-name>UserController</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>SourcesController</servlet-name>
+        <servlet-class>com.mateuszwiater.csc435.controller.SourcesController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SourcesController</servlet-name>
+        <url-pattern>/sources</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ArticlesController</servlet-name>
+        <servlet-class>com.mateuszwiater.csc435.controller.ArticlesController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ArticlesController</servlet-name>
+        <url-pattern>/articles</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PreferenceController</servlet-name>
+        <servlet-class>com.mateuszwiater.csc435.controller.PreferenceController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PreferenceController</servlet-name>
+        <url-pattern>/preference</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RecommendationController</servlet-name>
+        <servlet-class>com.mateuszwiater.csc435.controller.RecommendationController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RecommendationController</servlet-name>
+        <url-pattern>/recommendation</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -35,8 +35,8 @@ public class Source {
     public void save() throws SQLException {
         if (isNew) {
             final Gson gson = new Gson();
-            final String query = String.format("INSERT INTO SOURCES (ID,URL,NAME,COUNTRY,LANGUAGE,CATEGORY,DESCRIPTION,LOGOS,SORTBYS) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s');",
-                    id, url, name, country, language, category, description, gson.toJson(urlsToLogos), gson.toJson(sortBysAvailable));
+            final String query = String.format("INSERT INTO SOURCES (ID,URL,NAME,COUNTRY,LANGUAGE,CATEGORY,DESCRIPTION,LOGOS,SORTBYS) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+                    id, url, name, country, language, category, description.replace("'","''"), gson.toJson(urlsToLogos), gson.toJson(sortBysAvailable));
             DatabaseConnector.runQuery(query);
         }
     }

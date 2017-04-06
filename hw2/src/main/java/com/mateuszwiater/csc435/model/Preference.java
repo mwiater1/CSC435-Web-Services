@@ -3,6 +3,7 @@ package com.mateuszwiater.csc435.model;
 import com.mateuszwiater.csc435.db.DatabaseConnector;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,15 +68,15 @@ public class Preference {
         }
     }
 
-    public static Optional<List<Preference>> getPreferences(final String apiKey) throws SQLException {
+    public static List<Preference> getPreferences(final String apiKey) throws SQLException {
         final String query = String.format("SELECT APIKEY, ARTICLEID, FAVORITE, READ FROM PREFERENCES WHERE APIKEY = '%s';", apiKey);
 
         final Optional<List<List<String>>> res = DatabaseConnector.runQuery(query);
 
         if(res.isPresent()) {
-            return Optional.of(res.get().stream().map(Preference::toPreference).collect(Collectors.toList()));
+            return res.get().stream().map(Preference::toPreference).collect(Collectors.toList());
         } else {
-            return Optional.empty();
+            return new ArrayList<>();
         }
     }
 

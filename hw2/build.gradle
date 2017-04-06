@@ -7,9 +7,14 @@ apply plugin: 'application'
 apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 run {
     mainClassName = 'com.mateuszwiater.csc435.db.DatabaseConnector'
+}
+
+gretty {
+    servletContainer = 'jetty9.3'
 }
 
 repositories {
@@ -19,6 +24,7 @@ repositories {
 dependencies {
     compile 'com.h2database:h2:1.4.194'
     compile 'org.slf4j:slf4j-api:1.7.24'
+    compile 'com.google.guava:guava:21.0'
     compile 'org.slf4j:slf4j-simple:1.7.24'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'javax.servlet:javax.servlet-api:4.0.0-b01'

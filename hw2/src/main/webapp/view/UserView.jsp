@@ -24,13 +24,14 @@
     <body>
         <nav>
             <div class="nav-wrapper">
-              <a href="#" class="brand-logo center">Newsly</a>
-              <ul class="left">
-                <li class="active"><a href="#">User</a></li>
-                <li><a href="#">Sources</a></li>
-                <li><a href="#">Articles</a></li>
-                <li><a href="#">Recommendation</a></li>
-              </ul>
+                <a href="#" class="brand-logo right">Newsly</a>
+                <ul class="left">
+                    <li class="active"><a href="/hw2/">User</a></li>
+                    <li><a href="/hw2/sources">Sources</a></li>
+                    <li><a href="/hw2/articles">Articles</a></li>
+                    <li><a href="/hw2/recommendation">Recommendation</a></li>
+                    <li><a href="/hw2/preference">Preferences</a></li>
+                </ul>
             </div>
          </nav>
 
@@ -39,7 +40,7 @@
                 <div class="col s12 m6 l4">
                     <div class="card-panel">
                         <h4>Current User</h4>
-                        <form action="user" method="" id="form1">
+                        <form action="" method="" id="form1">
                             <div class="input-field inline full">
                                 <input disabled name="username" type="text" class="validate" value="<%= request.getSession().getAttribute("userName") %>">
                                 <label for="username">User Name</label>
@@ -99,69 +100,69 @@
 		<script>
 		    $('#loginBtn').click(function() {
                 $.ajax({
-                    url: '',
+                    url: '/hw2/',
                     type: 'GET',
                     data: {'userName':$('#loginName').val(),'password':$('#loginPass').val()},
                     success: function (result) {
                         location.reload();
                     },
                     error: function (xhr, textStatus, error) {
-                          Materialize.toast(error, 4000);
+                        Materialize.toast(xhr.status + ": " + xhr.responseText, 4000);
                     }
                 });
              });
 
             $('#logoutBtn').click(function() {
 				$.ajax({
-					url: '',
+					url: '/hw2/',
 					type: 'POST',
 					data: {'logout':'true'},
 					success: function (result) {
 					    location.reload();
 					},
 					error: function (xhr, textStatus, error) {
-                          Materialize.toast(error, 4000);
+                        Materialize.toast(xhr.status + ": " + xhr.responseText, 4000);
                     }
 				});
 			});
 
 			$('#registerBtn').click(function() {
                 $.ajax({
-                    url: '',
+                    url: '/hw2/',
                     type: 'PUT',
-                    data: {'userName':$('#loginName').val(),'password':$('#loginPass').val()},
+                    data: { 'userName':$('#loginName').val(),'password': $('#loginPass').val() },
                     success: function (result) {
                         location.reload();
                     },
                     error: function (xhr, textStatus, error) {
-                          Materialize.toast(error, 4000);
+                        Materialize.toast(xhr.status + ": " + xhr.responseText, 4000);
                     }
                 });
             });
 
 			$('#deleteBtn').click(function() {
                 $.ajax({
-                    url: '',
+                    url: '/hw2/',
                     type: 'DELETE',
                     success: function (result) {
                         location.reload();
                     },
                     error: function (xhr, textStatus, error) {
-                        Materialize.toast(error, 4000);
+                        Materialize.toast(xhr.status + ": " + xhr.responseText, 4000);
                     }
                 });
              });
 
             $('#submitBtn').click(function() {
                 $.ajax({
-                    url: '',
+                    url: '/hw2/',
                     type: 'POST',
                     data: {'userName':$('#changeName').val(),'password':$('#changePass').val()},
                     success: function (result) {
                         location.reload();
                     },
                     error: function (xhr, textStatus, error) {
-                        Materialize.toast(error, 4000);
+                        Materialize.toast(xhr.status + ": " + xhr.responseText, 4000);
                     }
                 });
             });
