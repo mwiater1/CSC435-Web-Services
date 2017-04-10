@@ -65,7 +65,7 @@ public class RecommendController extends HttpServlet {
                     out.print(RecommendView.getView(OK, "Favorite an article to start getting recommendations.", null));
                 } else {
                     resp.setStatus(400);
-                    out.print(authResponse.toJson());
+                    out.print(authResponse.getView());
                 }
             } catch (SQLException e) {
                 logger.error("SOURCES GET", e);

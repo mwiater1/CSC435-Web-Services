@@ -32,7 +32,7 @@ public class CountryController extends HttpServlet {
                     out.print(CountryView.getView(OK,"", Country.getCountries()));
                 } else {
                     resp.setStatus(400);
-                    out.print(authResponse.toJson());
+                    out.print(authResponse.getView());
                 }
             } catch (SQLException e) {
                 logger.error("COUNTRY GET", e);

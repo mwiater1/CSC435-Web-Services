@@ -32,7 +32,7 @@ public class CategoryController extends HttpServlet {
                     out.print(CategoryView.getView(OK,"", Category.getCategories()));
                 } else {
                     resp.setStatus(400);
-                    out.print(authResponse.toJson());
+                    out.print(authResponse.getView());
                 }
             } catch (SQLException e) {
                 logger.error("CATEGORY GET", e);

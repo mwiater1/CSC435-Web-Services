@@ -52,7 +52,7 @@ public class PreferenceController extends HttpServlet {
                     out.print(PreferenceView.getView(OK, "", articles));
                 } else {
                     resp.setStatus(400);
-                    out.print(authResponse.toJson());
+                    out.print(authResponse.getView());
                 }
             } catch (SQLException e) {
                 logger.error("PREFERENCE GET", e);
@@ -100,7 +100,7 @@ public class PreferenceController extends HttpServlet {
                     }
                 } else {
                     resp.setStatus(400);
-                    out.print(authResponse.toJson());
+                    out.print(authResponse.getView());
                 }
             } catch (SQLException e) {
                 logger.error("PREFERENCE POST", e);

@@ -82,7 +82,7 @@ public class UserController extends HttpServlet {
                     out.print(UserView.postView(OK, "", user));
                 } else {
                     resp.setStatus(400);
-                    out.print(authResponse.toJson());
+                    out.print(authResponse.getView());
                 }
             } catch (SQLException e) {
                 if (e.getErrorCode() == 23505) {
@@ -153,7 +153,7 @@ public class UserController extends HttpServlet {
                     out.print(UserView.deleteView(OK, ""));
                 } else {
                     resp.setStatus(400);
-                    out.print(authResponse.toJson());
+                    out.print(authResponse.getView());
                 }
             } catch (SQLException e) {
                 logger.error("USER DELETE", e);

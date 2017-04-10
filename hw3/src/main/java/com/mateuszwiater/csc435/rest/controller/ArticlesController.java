@@ -71,28 +71,73 @@ public class ArticlesController extends HttpServlet {
                                                 .collect(Collectors.toList());
 
                                         if(sources.size() == 0) {
-                                            out.print(ArticlesView.getView(OK,"No Source That Matches "));
+                                            out.print(ArticlesView.getView(OK, String.format("No Source That Matches The Category '%s' And SortBy '%s'",category.get().getName(),sortByParam), new ArrayList<>()));
                                         } else {
-
+                                            final Source source = sources.get(ThreadLocalRandom.current().nextInt(sources.size()));
+                                            final List<Article> articles = Article.getArticles(source, sortByParam);
+                                            out.print(ArticlesView.getView(OK, "", articles));
                                         }
                                     } else {
                                         resp.setStatus(400);
                                         out.print(ArticlesView.getView(FAIL, "Invalid SortBy '" + sortByParam + "'", new ArrayList<>()));
                                     }
                                 } else {
+                                    final List<Source> sources = Source.getSources(category.get(), null, null);
 
+                                    if(sources.size() == 0) {
+                                        out.print(ArticlesView.getView(OK, String.format("No Source That Matches The Category '%s'",category.get().getName()), new ArrayList<>()));
+                                    } else {
+                                        final Source source = sources.get(ThreadLocalRandom.current().nextInt(sources.size()));
+                                        final String sortBy = source.getSortBysAvailable().get(ThreadLocalRandom.current().nextInt(source.getSortBysAvailable().size()));
+                                        final List<Article> articles = Article.getArticles(source, sortBy);
+                                        out.print(ArticlesView.getView(OK, "", articles));
+                                    }
                                 }
                             } else {
                                 resp.setStatus(400);
                                 out.print(ArticlesView.getView(FAIL, "Invalid Category.", new ArrayList<>()));
                             }
                         } else {
+                            final List<Category> categories = Category.getCategories();
+                            if(categories.size() == 0) {
+                                out.print(ArticlesView.getView(FAIL, "No Available Categories", new ArrayList<>()));
+                            } else {
+                                final Category category = categories.get(ThreadLocalRandom.current().nextInt(categories.size()));
+                                if(sortByParam != null && !sortByParam.isEmpty()) {
+                                    if(validateSortBy(sortByParam)) {
+                                        final List<Source> sources = Source.getSources(category, null, null).stream()
+                                                .filter(s -> s.getSortBysAvailable().contains(sortByParam))
+                                                .collect(Collectors.toList());
 
+                                        if(sources.size() == 0) {
+                                            out.print(ArticlesView.getView(OK, String.format("No Source That Matches The Category '%s' And SortBy '%s'",category.getName(),sortByParam), new ArrayList<>()));
+                                        } else {
+                                            final Source source = sources.get(ThreadLocalRandom.current().nextInt(sources.size()));
+                                            final List<Article> articles = Article.getArticles(source, sortByParam);
+                                            out.print(ArticlesView.getView(OK, "", articles));
+                                        }
+                                    } else {
+                                        resp.setStatus(400);
+                                        out.print(ArticlesView.getView(FAIL, "Invalid SortBy '" + sortByParam + "'", new ArrayList<>()));
+                                    }
+                                } else {
+                                    final List<Source> sources = Source.getSources(category, null, null);
+
+                                    if(sources.size() == 0) {
+                                        out.print(ArticlesView.getView(OK, String.format("No Source That Matches The Category '%s'",category.getName()), new ArrayList<>()));
+                                    } else {
+                                        final Source source = sources.get(ThreadLocalRandom.current().nextInt(sources.size()));
+                                        final String sortBy = source.getSortBysAvailable().get(ThreadLocalRandom.current().nextInt(source.getSortBysAvailable().size()));
+                                        final List<Article> articles = Article.getArticles(source, sortBy);
+                                        out.print(ArticlesView.getView(OK, "", articles));
+                                    }
+                                }
+                            }
                         }
                     }
                 } else {
                     resp.setStatus(400);
-                    out.print(authResponse.toJson());
+                    out.print(authResponse.getView());
                 }
             } catch (SQLException e) {
                 logger.error("ARTICLES GET", e);

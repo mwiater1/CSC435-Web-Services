@@ -54,7 +54,7 @@ public class SourcesController extends HttpServlet {
                     }
                 } else {
                     resp.setStatus(400);
-                    out.print(authResponse.toJson());
+                    out.print(authResponse.getView());
                 }
             } catch (SQLException e) {
                 logger.error("SOURCES GET", e);

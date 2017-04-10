@@ -33,7 +33,7 @@ public class LanguageController extends HttpServlet {
                     out.print(LanguageView.getView(OK,"", Language.getLanguages()));
                 } else {
                     resp.setStatus(400);
-                    out.print(authResponse.toJson());
+                    out.print(authResponse.getView());
                 }
             } catch (SQLException e) {
                 logger.error("LANGUAGE GET", e);
