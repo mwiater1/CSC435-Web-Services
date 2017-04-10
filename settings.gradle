@@ -1,4 +1,4 @@
 rootProject.name = 'csc435-web-services'
 include 'hw1'
 include 'hw2'
-
+include 'hw3'
