@@ -12,11 +12,12 @@ import static com.mateuszwiater.csc435.rest.util.Response.Status.OK;
 public class Auth {
 
     public static AuthResponse authenticate(String apiKey) throws SQLException {
-        if(apiKey == null || !apiKey.isEmpty()) {
-            apiKey = "any";
+        try {
+            final UUID uuid = UUID.fromString(apiKey);
+            return new AuthResponse(User.getUser(uuid).orElse(null));
+        } catch (NullPointerException | IllegalArgumentException e) {
+            return new AuthResponse(null);
         }
-
-        return new AuthResponse(User.getUser(UUID.fromString(apiKey)).orElse(null));
     }
 
     public static class AuthResponse {
