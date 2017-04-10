@@ -145,7 +145,9 @@ Example Response:
 ```
 {
     "status":"ok",
-    "message":""
+    "message":"",
+    "userName":"mwiater",
+    "apiKey":"fcb3e9d9-f5aa-46d8-8097-095d5b4b0420"
 }
 ```
 
@@ -293,7 +295,7 @@ Example Response:
 {
    "status":"ok",
    "message":"",
-   "articles":[
+   "article":
       {
          "author":"Napier Lopez",
          "title":"Report: WhatsApp begins testing a way to actually make money",
@@ -303,7 +305,6 @@ Example Response:
          "source":"the-next-web",
          "publishedAt":"2017-03-09T00:11:46Z"
       }
-   ]
 }
 ```
 
