@@ -1,6 +1,8 @@
 package com.mateuszwiater.csc435.rest.controller;
 
-import com.mateuszwiater.csc435.model.*;
+import com.mateuszwiater.csc435.model.Article;
+import com.mateuszwiater.csc435.model.Preference;
+import com.mateuszwiater.csc435.model.Source;
 import com.mateuszwiater.csc435.rest.util.Auth;
 import com.mateuszwiater.csc435.rest.view.RecommendView;
 import org.slf4j.Logger;
