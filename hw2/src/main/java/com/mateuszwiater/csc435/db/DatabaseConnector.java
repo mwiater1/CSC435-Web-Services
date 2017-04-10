@@ -17,10 +17,6 @@ public class DatabaseConnector {
     private static DatabaseConnector instance;
     private Connection connection;
 
-    public static void main(String[] args) {
-        bootstrap(getInstance().getConnection());
-    }
-
     private static void bootstrap(final Connection con) {
         try {
             ResultSet rs = con.getMetaData().getTables(null, null, null, new String[]{"TABLE"});
