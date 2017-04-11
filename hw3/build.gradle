@@ -9,10 +9,6 @@ apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.p
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-run {
-    mainClassName = 'com.mateuszwiater.csc435.db.ArticlesLoader'
-}
-
 gretty {
     servletContainer = 'jetty9.3'
 }
