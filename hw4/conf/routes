@@ -1,0 +1,9 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET     /hw4                        controllers.UserController.doGet
+GET     /hw4/sources                controllers.SourcesController.doGet
+GET     /hw4/articles               controllers.ArticlesController.doGet
+GET     /hw4/recommendation         controllers.RecommendationController.doGet
+GET     /hw4/preference             controllers.PreferenceController.doGet
