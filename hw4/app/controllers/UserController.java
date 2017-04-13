@@ -7,6 +7,6 @@ import views.html.UserView;
 public class UserController extends Controller {
 
     public Result doGet() {
-        return ok(UserView.render());
+        return ok(UserView.render("Dummy Name", "Dummy API Key"));
     }
 }
