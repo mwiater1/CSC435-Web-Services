@@ -1,5 +1,5 @@
 {
-  "url":"jdbc:h2:tcp://localhost/~/Newsly",
+  "url":"jdbc:h2:tcp://localhost/~/Newsly2",
   "user":"sa",
   "driver":"org.h2.Driver",
   "password":""
