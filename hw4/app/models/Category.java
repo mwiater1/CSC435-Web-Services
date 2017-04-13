@@ -1,5 +1,8 @@
 package models;
 
+import java.util.Collections;
+import java.util.List;
+
 public class Category {
     private final String name;
 
@@ -9,5 +12,9 @@ public class Category {
 
     public String getName() {
         return name;
+    }
+
+    public static List<Category> getCategories() {
+        return Collections.singletonList(new Category("general"));
     }
 }

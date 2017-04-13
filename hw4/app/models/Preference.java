@@ -1,5 +1,8 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Preference {
     private final String apiKey, articleId;
     private boolean favorite, read;
@@ -33,5 +36,14 @@ public class Preference {
 
     public void setRead(boolean read) {
         this.read = read;
+    }
+
+    public static List<Preference> getPreferences() {
+        final List<Preference> preferences = new ArrayList<>();
+        preferences.add(new Preference("apiKey", "1", true, true));
+        preferences.add(new Preference("apiKey", "2", false, true));
+        preferences.add(new Preference("apiKey", "4", true, false));
+
+        return preferences;
     }
 }

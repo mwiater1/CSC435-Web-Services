@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 public class Country {
@@ -16,5 +18,9 @@ public class Country {
 
     public String getCode() {
         return code;
+    }
+
+    public static List<Country> getCountries() {
+        return Arrays.asList(new Country("au"), new Country("us"));
     }
 }

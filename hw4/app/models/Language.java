@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 public class Language {
@@ -16,5 +18,9 @@ public class Language {
 
     public String getCode() {
         return code;
+    }
+
+    public static List<Language> getLanguages() {
+        return Collections.singletonList(new Language("en"));
     }
 }
