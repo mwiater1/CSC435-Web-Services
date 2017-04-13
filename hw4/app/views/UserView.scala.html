@@ -1,3 +1,5 @@
+@(userName: String, apiKey: String)
+
 @Wrapper("user") {@* CSS CODE *@
     <style>
         .full {
@@ -11,7 +13,7 @@
     <script>
         $('#loginBtn').click(function() {
             $.ajax({
-                url: '/hw3/',
+                url: '@controllers.routes.UserController.doGet()',
                 type: 'GET',
                 data: {'userName':$('#loginName').val(),'password':$('#loginPass').val()},
                 success: function (result) {
@@ -25,7 +27,7 @@
 
         $('#logoutBtn').click(function() {
             $.ajax({
-                url: '/hw3/',
+                url: '@controllers.routes.UserController.doGet()',
                 type: 'POST',
                 data: {'logout':'true'},
                 success: function (result) {
@@ -39,7 +41,7 @@
 
         $('#registerBtn').click(function() {
             $.ajax({
-                url: '/hw3/',
+                url: '@controllers.routes.UserController.doGet()',
                 type: 'PUT',
                 data: { 'userName':$('#loginName').val(),'password': $('#loginPass').val() },
                 success: function (result) {
@@ -53,7 +55,7 @@
 
         $('#deleteBtn').click(function() {
             $.ajax({
-                url: '/hw3/',
+                url: '@controllers.routes.UserController.doGet()',
                 type: 'DELETE',
                 success: function (result) {
                     location.reload();
@@ -66,7 +68,7 @@
 
         $('#submitBtn').click(function() {
             $.ajax({
-                url: '/hw3/',
+                url: '@controllers.routes.UserController.doGet()',
                 type: 'POST',
                 data: {'userName':$('#changeName').val(),'password':$('#changePass').val()},
                 success: function (result) {
@@ -85,11 +87,11 @@
                 <h4>Current User</h4>
                 <form action="" method="" id="form1">
                     <div class="input-field inline full">
-                        <input disabled name="username" type="text" class="validate" value="userName JSP">
+                        <input disabled name="username" type="text" class="validate" value="@userName">
                         <label for="username">User Name</label>
                     </div>
                     <div class="input-field inline full">
-                        <input disabled name="apiKey" type="text" class="validate" value="apiKey JSP">
+                        <input disabled name="apiKey" type="text" class="validate" value="@apiKey">
                         <label for="apiKey">API Key</label>
                     </div>
                 </form>
