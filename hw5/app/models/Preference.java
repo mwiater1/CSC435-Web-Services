@@ -5,24 +5,47 @@ import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Entity
 public class Preference extends Model {
+    private static Finder<Long, Preference> find = new Finder<>(Preference.class);
+
     @Id
     private long id;
-
     @Constraints.Required
-    private final long articleId;
-
+    private UUID apiKey;
+    @Constraints.Required
+    private long articleId;
     @Constraints.Required
     private boolean favorite, read;
 
-    Preference(final long articleId) {
+    public Preference(final UUID apiKey, final long articleId, final boolean favorite, final boolean read) {
+        this.read = read;
+        this.apiKey = apiKey;
+        this.favorite = favorite;
         this.articleId = articleId;
+    }
+
+    public static Optional<Preference> getPreference(final String apiKey, final String articleId) {
+        return Optional.ofNullable(find.where()
+                .eq("apiKey", apiKey)
+                .eq("articleId", articleId)
+                .findUnique());
+    }
+
+    public static List<Preference> getPreferences(final String apiKey) {
+        return find.where().eq("apiKey", apiKey).findList();
     }
 
     public long getId() {
         return id;
+    }
+
+    public UUID getApiKey() {
+        return apiKey;
     }
 
     public long getArticleId() {

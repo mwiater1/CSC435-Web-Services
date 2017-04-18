@@ -1,33 +1,30 @@
 package models;
 
-import com.avaje.ebean.Model;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Entity
-public class Category extends Model {
-    private static Model.Finder<String, Category> find = new Model.Finder<>(Category.class);
+public class Category extends CodeName {
 
-    @Id
-    private String name;
-
-    public Category(final String name) {
-        this.name = name;
+    private Category(final String name) {
+        super(name, name);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public static Optional<Category> getCategory(final String name) {
-        return Optional.ofNullable(name).map(n -> find.byId(n));
+    public static Optional<Category> getCategory(final String category) {
+        return Optional.ofNullable(Source.find
+                .select("category")
+                .where()
+                .eq("category", category)
+                .findUnique()
+        ).map(s -> new Category(s.getCategory()));
     }
 
     public static List<Category> getCategories() {
-        return find.all();
+        return Source.find
+                .select("category")
+                .findSet()
+                .stream()
+                .map(s -> new Category(s.getCategory()))
+                .collect(Collectors.toList());
     }
 }

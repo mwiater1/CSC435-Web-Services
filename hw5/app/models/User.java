@@ -5,7 +5,8 @@ import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.*;
+import java.util.Optional;
+import java.util.UUID;
 
 @Entity
 public class User extends Model {
@@ -13,28 +14,35 @@ public class User extends Model {
 
     @Id
     private String userName;
-
-    @Constraints.Required
-    private UUID apiKey;
-
     @Constraints.Required
     private String password;
 
     @Constraints.Required
-    private List<Preference> preferences;
+    private UUID apiKey;
 
     public User(final String userName, final String password) {
-        this.apiKey = UUID.randomUUID();
         this.userName = userName;
         this.password = password;
-        this.preferences = new ArrayList<>();
+        this.apiKey = UUID.randomUUID();
+    }
+
+    public static Optional<User> getUser(final UUID apiKey) {
+        return Optional.ofNullable(find.where().eq("apiKey", apiKey).findUnique());
+    }
+
+    public static Optional<User> getUser(final String userName, final String password) {
+        return Optional.ofNullable(find.where()
+                .eq("userName", userName)
+                .eq("password", password)
+                .findUnique()
+        );
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public void setUserName(final String userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
@@ -42,27 +50,11 @@ public class User extends Model {
         return password;
     }
 
-    public void setPassword(final String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
     public UUID getApiKey() {
         return apiKey;
-    }
-
-    public Preference getPreference(final long articleId) {
-        return preferences.stream().filter(p -> p.getArticleId() == articleId).findFirst().orElse(new Preference(articleId));
-    }
-
-    public List<Preference> getPreferences() {
-        return Collections.unmodifiableList(preferences);
-    }
-
-    public static Optional<User> getUser(final UUID apiKey) {
-        return Optional.ofNullable(find.where().eq("apiKey",apiKey).findUnique());
-    }
-
-    public static Optional<User> getUser(final String userName, final String password) {
-        return Optional.ofNullable(find.where().eq("userName",userName).eq("password",password).findUnique());
     }
 }

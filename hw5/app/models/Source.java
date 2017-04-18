@@ -6,36 +6,25 @@ import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Entity
 public class Source extends Model {
-    private static Finder<String, Source> find = new Finder<>(Source.class);
+    public static Finder<String, Source> find = new Finder<>(Source.class);
 
     @Id
     private String id;
     @Constraints.Required
-    private URL url;
-    @Constraints.Required
     private List<String> sortBysAvailable;
     @Constraints.Required
-    private Map<String, URL> urlsToLogos;
+    private Map<String, String> urlsToLogos;
     @Constraints.Required
-    private String name, description;
-    @Constraints.Required
-    @OneToMany
-    private Category category;
-    @Constraints.Required
-    private Language language;
-    @Constraints.Required
-    private Country country;
+    private String url, name, category, language, country, description;
 
-    public Source(final String id, final String name, final String description, final URL url, final Category category,
-                  final Language language, final Country country, final Map<String, URL> urlsToLogos, final List<String> sortBysAvailable) {
+    public Source(String id, String name, String description, String url, String category, String language,
+                   String country, Map<String, String> urlsToLogos, List<String> sortBysAvailable) {
         this.id = id;
         this.url = url;
         this.name = name;
@@ -47,53 +36,85 @@ public class Source extends Model {
         this.sortBysAvailable = sortBysAvailable;
     }
 
-    public String getId() {
-        return id;
+    public static Optional<Source> getSource(final String id) {
+        return Optional.ofNullable(find.byId(id));
     }
 
-    public URL getUrl() {
-        return url;
+    public static List<Source> getSources(final Category category, final Language language, final Country country) {
+        final ExpressionList<Source> query = find.where();
+
+        Optional.ofNullable(category).ifPresent(c -> query.eq("category", c.getName()));
+        Optional.ofNullable(language).ifPresent(l -> query.eq("language", l.getCode()));
+        Optional.ofNullable(country).ifPresent(c -> query.eq("country", c.getCode()));
+
+        return query.findList();
+    }
+
+    public String getId() {
+        return id;
     }
 
     public List<String> getSortBysAvailable() {
         return sortBysAvailable;
     }
 
-    public Map<String, URL> getUrlsToLogos() {
+    public void setSortBysAvailable(List<String> sortBysAvailable) {
+        this.sortBysAvailable = sortBysAvailable;
+    }
+
+    public Map<String, String> getUrlsToLogos() {
         return urlsToLogos;
+    }
+
+    public void setUrlsToLogos(Map<String, String> urlsToLogos) {
+        this.urlsToLogos = urlsToLogos;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public String getDescription() {
         return description;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public Language getLanguage() {
-        return language;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public static Optional<Source> getSource(final String id) {
-        return Optional.ofNullable(id).map(i -> find.byId(i));
-    }
-
-    public static List<Source> getSources(final Category category, final Language language, final Country country) {
-        final ExpressionList<Source> query = find.where();
-
-        Optional.ofNullable(country).ifPresent(c -> query.eq("country", c));
-        Optional.ofNullable(category).ifPresent(c -> query.eq("category", c));
-        Optional.ofNullable(language).ifPresent(l -> query.eq("language", l));
-
-        return query.findList();
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

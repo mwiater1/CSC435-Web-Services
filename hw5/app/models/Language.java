@@ -1,41 +1,31 @@
 package models;
 
-import com.avaje.ebean.Model;
-import play.data.validation.Constraints;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Entity
-public class Language extends Model {
-    private static Model.Finder<String, Language> find = new Model.Finder<>(Language.class);
+public class Language extends CodeName {
 
-    @Id
-    private String code;
-    @Constraints.Required
-    private String name;
-
-    public Language(final String code) {
-        this.code = code;
-        this.name = new Locale(code).getDisplayLanguage();
+    private Language(final String code) {
+        super(new Locale(code).getDisplayLanguage(), code);
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public static Optional<Language> getLanguage(final String code) {
-        return Optional.ofNullable(code).map(c -> find.byId(c));
+    public static Optional<Language> getLanguage(final String language) {
+        return Optional.ofNullable(Source.find
+                .select("language")
+                .where()
+                .eq("language", language)
+                .findUnique()
+        ).map(s -> new Language(s.getLanguage()));
     }
 
     public static List<Language> getLanguages() {
-        return find.all();
+        return Source.find
+                .select("language")
+                .findSet()
+                .stream()
+                .map(s -> new Language(s.getLanguage()))
+                .collect(Collectors.toList());
     }
 }

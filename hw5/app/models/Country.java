@@ -1,41 +1,31 @@
 package models;
 
-import com.avaje.ebean.Model;
-import play.data.validation.Constraints;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Entity
-public class Country extends Model {
-    private static Model.Finder<String, Country> find = new Model.Finder<>(Country.class);
+public class Country extends CodeName {
 
-    @Id
-    private String code;
-    @Constraints.Required
-    private String name;
-
-    public Country(final String code) {
-        this.code = code;
-        this.name = new Locale("", code).getDisplayCountry();
+    private Country(final String code) {
+        super(new Locale("", code).getDisplayCountry(), code);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public static Optional<Country> getCountry(final String code) {
-        return Optional.ofNullable(code).map(c -> find.byId(c));
+    public static Optional<Country> getCountry(final String country) {
+        return Optional.ofNullable(Source.find
+                .select("country")
+                .where()
+                .eq("country", country)
+                .findUnique()
+        ).map(s -> new Country(s.getCountry()));
     }
 
     public static List<Country> getCountries() {
-        return find.all();
+        return Source.find
+                .select("country")
+                .findSet()
+                .stream()
+                .map(s -> new Country(s.getCountry()))
+                .collect(Collectors.toList());
     }
 }
