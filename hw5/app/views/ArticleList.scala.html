@@ -1,0 +1,37 @@
+@import java.util
+@(articles: util.List[Article], preferenceMap: util.Map[Long, Preference])
+
+<div class="row">
+@for(a <- articles) {
+    <div class="col s12 m6 l4">
+        <div class="card large hoverable">
+            <!-- Card Content -->
+            <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src="@a.getUrlToImage">
+            </div>
+            <div class="card-content">
+                <span class="activator grey-text text-darken-4">@a.getTitle<i class="material-icons right">more_vert</i></span>
+            </div>
+            <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">@a.getTitle<i class="material-icons right">close</i></span>
+                <p>@a.getDescription</p>
+                <ul class="collection">
+                    <li class="collection-item"><div>Source<span class="new badge" data-badge-caption="@a.getSource.getName"></span></div></li>
+                    <li class="collection-item"><div>SortBy<span class="new badge" data-badge-caption="@a.getSortBy"></span></div></li>
+                    <li class="collection-item"><div>Published<span class="new badge" data-badge-caption="@a.getPublishedAt"></span></div></li>
+                    <li class="collection-item"><div>Author<span class="new badge" data-badge-caption="@a.getAuthor"></span></div></li>
+                </ul>
+            </div>
+            <div class="card-action">
+                <a href="@a.getUrl" class="waves-effect waves-light btn">Go To Article</a>
+                <a>
+                    <i class="material-icons small favorite-star right" data-articleid="<%= c.getId() %>">@{ if(preferenceMap.containsKey(a.getId) && preferenceMap.get(a.getId).isFavorite) "star" else "star_border" }</i>
+                </a>
+                <a>
+                    <i class="material-icons small read right" data-articleid="<%= c.getId() %>">@{ if(preferenceMap.containsKey(a.getId) && preferenceMap.get(a.getId).isRead) "drafts" else "markunread"}</i>
+                </a>
+            </div>
+        </div>
+    </div>
+}
+</div>

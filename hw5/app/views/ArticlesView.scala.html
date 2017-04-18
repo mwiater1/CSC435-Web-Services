@@ -1,0 +1,121 @@
+@import java.util
+@(articles: util.List[Article], preferenceMap: util.Map[Long, Preference], sources: util.List[Source], categories: util.List[Category], sortBys: util.List[String], selectedSource: String, selectedCategory: String, selectedSortBy: String)
+
+@Wrapper("articles") {@* CSS CODE *@
+    <style>
+        a, i {
+            cursor: pointer;
+        }
+        .full {
+            width: 100%;
+        }
+        .btn {
+            margin-bottom: 15px;
+        }
+    </style>
+}{@* JS CODE *@
+    <script>
+        $(document).ready(function() {
+            $('select').material_select();
+        });
+
+        $('.favorite-star').click(function () {
+            var obj = $(this);
+            var articleId = obj.data('articleid');
+            if($(this).html() === 'star') {
+                $.ajax({
+                    url: '@controllers.routes.PreferenceController.doGet()',
+                    type: 'POST',
+                    data: {'favorite': 'false', 'articleId': articleId},
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, textStatus, error) {
+                        Materialize.toast(error, 4000);
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: '@controllers.routes.PreferenceController.doGet()',
+                    type: 'POST',
+                    data: {'favorite': 'true', 'articleId': articleId},
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, textStatus, error) {
+                        Materialize.toast(error, 4000);
+                    }
+                });
+            }
+        });
+
+        $('.read').click(function () {
+            var obj = $(this);
+            var articleId = obj.data('articleid');
+            if($(this).html() === 'markunread') {
+                $.ajax({
+                    url: '@controllers.routes.PreferenceController.doGet()',
+                    type: 'POST',
+                    data: {'read': 'true', 'articleId': articleId},
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, textStatus, error) {
+                        Materialize.toast(error, 4000);
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: '@controllers.routes.PreferenceController.doGet()',
+                    type: 'POST',
+                    data: {'read': 'false', 'articleId': articleId},
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, textStatus, error) {
+                        Materialize.toast(error, 4000);
+                    }
+                });
+            }
+        });
+    </script>
+}{@* Content *@
+    <div class="row card">
+        <div class="card-content">
+            <form action="@controllers.routes.ArticlesController.doGet()" method="get">
+                <div class="input-field col s3">
+                    <select name="source">
+                        <option value="any" @{ if(selectedSource.equalsIgnoreCase("any")) "selected" else "" }>Any</option>
+                        @for(s <- sources) {
+                        <option value="@s.getId" @{ if(selectedSource.equalsIgnoreCase(s.getId)) "selected" else "" }>@s.getName</option>
+                        }
+                    </select>
+                    <label>Source</label>
+                </div>
+                <div class="input-field col s3">
+                    <select name="sortby">
+                        <option value="any" @{ if(selectedSortBy.equalsIgnoreCase("any")) "selected" else "" }>Any</option>
+                        @for(s <- sortBys) {
+                        <option value="@s" @{ if(selectedSortBy.equalsIgnoreCase(s)) "selected" else "" }>@s</option>
+                        }
+                    </select>
+                    <label>SortBy</label>
+                </div>
+                <div class="input-field col s3">
+                    <select name="category">
+                        <option value="any" @{ if(selectedCategory.equalsIgnoreCase("any")) "selected" else "" }>Any</option>
+                        @for(c <- categories) {
+                        <option value="@c.getName" @{ if(selectedCategory.equalsIgnoreCase(c.getName)) "selected" else "" }>@c.getName</option>
+                        }
+                    </select>
+                    <label>Category</label>
+                </div>
+                <div class="col s3">
+                    <button class="btn waves-effect waves-light full" type="submit">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @ArticleList(articles, preferenceMap)
+}

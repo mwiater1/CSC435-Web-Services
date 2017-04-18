@@ -1,0 +1,38 @@
+@(page: String)(style: Html)(script: Html)(content: Html)
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Newsly</title>
+        <!--Import Google Icon Font-->
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Import Google Roboto Font-->
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css"  media="screen,projection"/>
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        @style
+    </head>
+    <body>
+        <nav>
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo right">Newsly</a>
+                <ul class="left">
+                    <li @if(page.equalsIgnoreCase("user")) {class="active"}><a href="@controllers.routes.UserController.doGet()">User</a></li>
+                    <li @if(page.equalsIgnoreCase("sources")) {class="active"}><a href="@controllers.routes.SourcesController.doGet()">Sources</a></li>
+                    <li @if(page.equalsIgnoreCase("articles")) {class="active"}><a href="@controllers.routes.ArticlesController.doGet()">Articles</a></li>
+                    <li @if(page.equalsIgnoreCase("recommendation")) {class="active"}><a href="@controllers.routes.RecommendationController.doGet()">Recommendation</a></li>
+                    <li @if(page.equalsIgnoreCase("preferences")) {class="active"}><a href="@controllers.routes.PreferenceController.doGet()">Preferences</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container">
+            @content
+        </div>
+        <!--Import jQuery before materialize.js-->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+        @script
+    </body>
+</html>

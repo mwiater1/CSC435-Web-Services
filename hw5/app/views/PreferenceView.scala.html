@@ -1,0 +1,106 @@
+@import java.util
+@(articles: util.List[Article], preferenceMap: util.Map[Long, Preference], favorite: Boolean, read: Boolean)
+
+@Wrapper("preferences") {@* CSS CODE *@
+    <style>
+        a {
+            cursor: pointer;
+        }
+        .full {
+            width: 100%;
+        }
+        .btn {
+            margin-bottom: 15px;
+        }
+    </style>
+}{@* JS CODE *@
+    <script>
+        $(document).ready(function() {
+            $('select').material_select();
+        });
+
+        $('.favorite-star').click(function () {
+            var obj = $(this);
+            var articleId = obj.data('articleid');
+            if($(this).html() === 'star') {
+                $.ajax({
+                    url: '@controllers.routes.PreferenceController.doGet()',
+                    type: 'POST',
+                    data: {'favorite': 'false', 'articleId': articleId},
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, textStatus, error) {
+                        Materialize.toast(error, 4000);
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: '@controllers.routes.PreferenceController.doGet()',
+                    type: 'POST',
+                    data: {'favorite': 'true', 'articleId': articleId},
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, textStatus, error) {
+                        Materialize.toast(error, 4000);
+                    }
+                });
+            }
+        });
+
+        $('.read').click(function () {
+            var obj = $(this);
+            var articleId = obj.data('articleid');
+            if($(this).html() === 'markunread') {
+                $.ajax({
+                    url: '@controllers.routes.PreferenceController.doGet()',
+                    type: 'POST',
+                    data: {'read': 'true', 'articleId': articleId},
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, textStatus, error) {
+                        Materialize.toast(error, 4000);
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: '@controllers.routes.PreferenceController.doGet()',
+                    type: 'POST',
+                    data: {'read': 'false', 'articleId': articleId},
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (xhr, textStatus, error) {
+                        Materialize.toast(error, 4000);
+                    }
+                });
+            }
+        });
+    </script>
+}{@* Content *@
+    <div class="row card">
+        <div class="card-content">
+            <form action="@controllers.routes.PreferenceController.doGet()" method="get">
+                <div class="col s4">
+                    <p>
+                        <input type="checkbox" id="favorite" name="favorite" value="true" @{ if(favorite) "checked" else "" }/>
+                        <label for="favorite">Favorite?</label>
+                    </p>
+                </div>
+                <div class="col s4">
+                    <p>
+                        <input type="checkbox" id="read" name="read" value="true" @{ if(read) "checked" else "" }/>
+                        <label for="read">Read?</label>
+                    </p>
+                </div>
+                <div class="col s4">
+                    <button class="btn waves-effect waves-light full" type="submit">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @ArticleList(articles, preferenceMap)
+}

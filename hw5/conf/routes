@@ -1,0 +1,13 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET     /hw5                        controllers.UserController.doGet()
+PUT     /hw5                        controllers.UserController.doPut()
+POST    /hw5                        controllers.UserController.doPost()
+DELETE  /hw5                        controllers.UserController.doDelete()
+GET     /hw5/sources                controllers.SourcesController.doGet()
+GET     /hw5/articles               controllers.ArticlesController.doGet()
+GET     /hw5/recommendation         controllers.RecommendationController.doGet()
+GET     /hw5/preference             controllers.PreferenceController.doGet()
+POST    /hw5/preference             controllers.PreferenceController.doPost()

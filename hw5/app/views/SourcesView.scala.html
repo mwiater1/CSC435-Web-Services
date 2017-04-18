@@ -1,0 +1,58 @@
+@import java.util
+@(sources: util.List[Source], categories: util.List[Category], languages: util.List[Language], countries: util.List[Country], selectedCategory: String, selectedLanguage: String, selectedCountry: String)
+
+@Wrapper("sources") {@* CSS CODE *@
+    <style>
+        .full {
+            width: 100%;
+        }
+        .btn {
+            margin-bottom: 15px;
+        }
+    </style>
+}{@* JS CODE *@
+    <script>
+        $(document).ready(function() {
+            $('select').material_select();
+        });
+    </script>
+}{@* Content *@
+    <div class="row card">
+        <div class="card-content">
+            <form action="@controllers.routes.SourcesController.doGet()" method="get">
+                <div class="input-field col s3">
+                    <select name="category">
+                        <option value="any" @{ if(selectedCategory.equalsIgnoreCase("any")) "selected" else "" }>Any</option>
+                        @for(c <- categories) {
+                            <option value="@c.getName" @{ if(selectedCategory.equalsIgnoreCase(c.getName)) "selected" else "" }>@c.getName</option>
+                        }
+                    </select>
+                    <label>Category</label>
+                </div>
+                <div class="input-field col s3">
+                    <select name="language">
+                        <option value="any" @{ if(selectedLanguage.equalsIgnoreCase("any")) "selected" else "" }>Any</option>
+                        @for(l <- languages) {
+                        <option value="@l.getCode" @{ if(selectedLanguage.equalsIgnoreCase(l.getCode)) "selected" else "" }>@l.getName</option>
+                        }
+                    </select>
+                    <label>Language</label>
+                </div>
+                <div class="input-field col s3">
+                    <select name="country">
+                        <option value="any" @{ if(selectedCountry.equalsIgnoreCase("any")) "selected" else "" }>Any</option>
+                        @for(c <- countries) {
+                        <option value="@c.getCode" @{ if(selectedCountry.equalsIgnoreCase(c.getCode)) "selected" else "" }>@c.getName</option>
+                        }
+                    </select>
+                    <label>Country</label>
+                </div>
+                <div class="col s3">
+                    <button class="btn waves-effect waves-light full" type="submit">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @SourceList(sources)
+}
