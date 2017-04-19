@@ -14,6 +14,7 @@ public class Language extends CodeName {
     public static Optional<Language> getLanguage(final String language) {
         return Optional.ofNullable(Source.find
                 .select("language")
+                .setDistinct(true)
                 .where()
                 .eq("language", language)
                 .findUnique()
@@ -23,6 +24,7 @@ public class Language extends CodeName {
     public static List<Language> getLanguages() {
         return Source.find
                 .select("language")
+                .setDistinct(true)
                 .findSet()
                 .stream()
                 .map(s -> new Language(s.getLanguage()))

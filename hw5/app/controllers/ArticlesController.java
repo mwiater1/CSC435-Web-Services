@@ -20,7 +20,6 @@ public class ArticlesController extends Controller {
         String sourceParam = formatParam(request().getQueryString("source"));
         String sortByParam = formatParam(request().getQueryString("sortby"));
         String categoryParam = formatParam(request().getQueryString("category"));
-        User user = User.getUser(UUID.fromString(session("apiKey"))).get();
 
         Source source;
         String sortBy;
@@ -52,11 +51,12 @@ public class ArticlesController extends Controller {
         }
 
         // Build preference map
-        Map<Long, Preference> preferenceMap = user.getPreferences().stream().collect(Collectors.toMap(Preference::getArticleId, Function.identity()));
+        Map<Long, Preference> preferenceMap = Preference.getPreferences(UUID.fromString(session("apiKey")))
+                .stream().collect(Collectors.toMap(Preference::getArticleId, Function.identity()));
 
         return ok(ArticlesView.render(Article.getArticles(source, sortBy), preferenceMap,
                 Source.getSources(null, null, null), Category.getCategories(),
-                Arrays.asList("top", "latest", "popular"), source.getId(), source.getCategory().getName(), sortBy));
+                Arrays.asList("top", "latest", "popular"), source.getId(), source.getCategory(), sortBy));
     }
 
     private String formatParam(final String param) {

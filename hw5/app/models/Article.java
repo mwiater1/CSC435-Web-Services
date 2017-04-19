@@ -4,18 +4,22 @@ import com.avaje.ebean.Model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Optional;
 
 import static services.Util.orElse;
 
 @Entity
+@Table(name="articles")
 public class Article extends Model {
     private static Finder<Long, Article> find = new Finder<>(Article.class);
 
     @Id
     private long id;
 
+    @Size(max = 1000)
     private String url, title, sortBy, author, sourceId, urlToImage, publishedAt, description;
 
     public Article(final String author, final String title, final String description, final String url,

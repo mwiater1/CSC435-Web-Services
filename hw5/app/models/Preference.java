@@ -5,11 +5,13 @@ import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Entity
+@Table(name="preferences")
 public class Preference extends Model {
     private static Finder<Long, Preference> find = new Finder<>(Preference.class);
 
@@ -29,14 +31,14 @@ public class Preference extends Model {
         this.articleId = articleId;
     }
 
-    public static Optional<Preference> getPreference(final String apiKey, final String articleId) {
+    public static Optional<Preference> getPreference(final UUID apiKey, final long articleId) {
         return Optional.ofNullable(find.where()
                 .eq("apiKey", apiKey)
                 .eq("articleId", articleId)
                 .findUnique());
     }
 
-    public static List<Preference> getPreferences(final String apiKey) {
+    public static List<Preference> getPreferences(final UUID apiKey) {
         return find.where().eq("apiKey", apiKey).findList();
     }
 

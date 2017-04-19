@@ -14,6 +14,7 @@ public class Country extends CodeName {
     public static Optional<Country> getCountry(final String country) {
         return Optional.ofNullable(Source.find
                 .select("country")
+                .setDistinct(true)
                 .where()
                 .eq("country", country)
                 .findUnique()
@@ -23,6 +24,7 @@ public class Country extends CodeName {
     public static List<Country> getCountries() {
         return Source.find
                 .select("country")
+                .setDistinct(true)
                 .findSet()
                 .stream()
                 .map(s -> new Country(s.getCountry()))

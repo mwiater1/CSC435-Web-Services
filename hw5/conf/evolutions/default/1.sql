@@ -3,76 +3,55 @@
 
 # --- !Ups
 
-create table article (
-  id                            bigint not null,
-  sort_by                       varchar(255),
-  published_at                  timestamp,
-  author                        varchar(255),
-  title                         varchar(255),
-  description                   varchar(255),
-  url                           varchar(255),
-  url_to_image                  varchar(255),
-  constraint pk_article primary key (id)
-);
-create sequence article_seq;
-
-create table category (
-  name                          varchar(255) not null,
-  constraint pk_category primary key (name)
+create table articles (
+  id                            bigserial not null,
+  url                           varchar(1000),
+  title                         varchar(1000),
+  sort_by                       varchar(1000),
+  author                        varchar(1000),
+  source_id                     varchar(1000),
+  url_to_image                  varchar(1000),
+  published_at                  varchar(1000),
+  description                   varchar(1000),
+  constraint pk_articles primary key (id)
 );
 
-create table country (
-  code                          varchar(255) not null,
-  name                          varchar(255),
-  constraint pk_country primary key (code)
-);
-
-create table language (
-  code                          varchar(255) not null,
-  name                          varchar(255),
-  constraint pk_language primary key (code)
-);
-
-create table preference (
-  id                            bigint not null,
+create table preferences (
+  id                            bigserial not null,
+  api_key                       uuid,
   article_id                    bigint,
   favorite                      boolean,
   read                          boolean,
-  constraint pk_preference primary key (id)
+  constraint pk_preferences primary key (id)
 );
-create sequence preference_seq;
 
-create table source (
+create table sources (
   id                            varchar(255) not null,
-  url                           varchar(255),
-  name                          varchar(255),
-  description                   varchar(255),
-  constraint pk_source primary key (id)
+  sort_bys                      json,
+  url                           varchar(1000),
+  name                          varchar(1000),
+  category                      varchar(1000),
+  language                      varchar(1000),
+  country                       varchar(1000),
+  description                   varchar(1000),
+  constraint pk_sources primary key (id)
 );
 
-create table user (
+create table users (
   user_name                     varchar(255) not null,
-  api_key                       uuid,
   password                      varchar(255),
-  constraint pk_user primary key (user_name)
+  api_key                       uuid,
+  constraint pk_users primary key (user_name)
 );
 
 
 # --- !Downs
 
-drop table if exists article;
-drop sequence if exists article_seq;
+drop table if exists articles cascade;
 
-drop table if exists category;
+drop table if exists preferences cascade;
 
-drop table if exists country;
+drop table if exists sources cascade;
 
-drop table if exists language;
-
-drop table if exists preference;
-drop sequence if exists preference_seq;
-
-drop table if exists source;
-
-drop table if exists user;
+drop table if exists users cascade;
 

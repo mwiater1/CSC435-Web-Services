@@ -5,10 +5,12 @@ import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Optional;
 import java.util.UUID;
 
 @Entity
+@Table(name="users")
 public class User extends Model {
     private static Finder<String, User> find = new Finder<>(User.class);
 

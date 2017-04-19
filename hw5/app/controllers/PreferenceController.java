@@ -23,10 +23,9 @@ public class PreferenceController extends Controller {
     public Result doGet() {
         boolean favoriteParam = Boolean.valueOf(request().getQueryString("favorite"));
         boolean readParam = Boolean.valueOf(request().getQueryString("read"));
-        User user = User.getUser(UUID.fromString(session("apiKey"))).get();
 
         // Build preference map
-        Map<Long, Preference> preferenceMap = user.getPreferences().stream().collect(Collectors.toMap(Preference::getArticleId, Function.identity()));
+        Map<Long, Preference> preferenceMap = Preference.getPreferences(UUID.fromString(session("apiKey"))).stream().collect(Collectors.toMap(Preference::getArticleId, Function.identity()));
 
         // Build the articles list
         List<Article> articles = new ArrayList<>();
@@ -50,13 +49,13 @@ public class PreferenceController extends Controller {
     public Result doPost() {
         String favoriteParam = request().body().asFormUrlEncoded().getOrDefault("favorite", new String[]{null})[0];
         String readParam = request().body().asFormUrlEncoded().getOrDefault("read", new String[]{null})[0];
-        String articleIdParam = request().body().asFormUrlEncoded().getOrDefault("userName", new String[]{null})[0];
-        User user = User.getUser(UUID.fromString(session("apiKey"))).get();
+        String articleIdParam = request().body().asFormUrlEncoded().getOrDefault("articleId", new String[]{null})[0];
 
         if(articleIdParam == null || articleIdParam.isEmpty()) {
             return status(400);
         } else if(favoriteParam != null || readParam != null) {
-            final Preference preference = user.getPreference(Long.valueOf(articleIdParam));
+            final Preference preference = Preference.getPreference(UUID.fromString(session("apiKey")),Long.valueOf(articleIdParam))
+                    .orElse(new Preference(UUID.fromString(session("apiKey")), Long.valueOf(articleIdParam), false, false));
 
             if(favoriteParam != null) {
                 preference.setFavorite(Boolean.valueOf(favoriteParam));

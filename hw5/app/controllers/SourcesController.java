@@ -16,15 +16,16 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 
+import static services.Util.orElse;
+
 @With(Auth.class)
 @SuppressWarnings("Duplicates")
 public class SourcesController extends Controller {
 
     public Result doGet() {
-        String category = request().getQueryString("category");
-        String language = request().getQueryString("language");
-        String country = request().getQueryString("country");
-        User user = User.getUser(UUID.fromString(session("apiKey"))).get();
+        String category = orElse(request().getQueryString("category"), "any");
+        String language = orElse(request().getQueryString("language"),"any");
+        String country = orElse(request().getQueryString("country"),"any");
 
         Optional<Category> cat = Category.getCategory(category);
         Optional<Language> lang = Language.getLanguage(language);

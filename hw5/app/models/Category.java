@@ -13,6 +13,7 @@ public class Category extends CodeName {
     public static Optional<Category> getCategory(final String category) {
         return Optional.ofNullable(Source.find
                 .select("category")
+                .setDistinct(true)
                 .where()
                 .eq("category", category)
                 .findUnique()
@@ -22,6 +23,7 @@ public class Category extends CodeName {
     public static List<Category> getCategories() {
         return Source.find
                 .select("category")
+                .setDistinct(true)
                 .findSet()
                 .stream()
                 .map(s -> new Category(s.getCategory()))

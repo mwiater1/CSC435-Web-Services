@@ -2,29 +2,35 @@ package models;
 
 import com.avaje.ebean.ExpressionList;
 import com.avaje.ebean.Model;
+import com.avaje.ebean.annotation.DbJson;
 import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
+@Table(name="sources")
 public class Source extends Model {
     public static Finder<String, Source> find = new Finder<>(Source.class);
 
     @Id
     private String id;
-    @Constraints.Required
+
     private List<String> sortBysAvailable;
+
+    @DbJson
+    private Map<String,String> sortBys;
+
     @Constraints.Required
-    private Map<String, String> urlsToLogos;
-    @Constraints.Required
+    @Size(max = 1000)
     private String url, name, category, language, country, description;
 
     public Source(String id, String name, String description, String url, String category, String language,
-                   String country, Map<String, String> urlsToLogos, List<String> sortBysAvailable) {
+                   String country, List<String> sortBysAvailable) {
         this.id = id;
         this.url = url;
         this.name = name;
@@ -32,8 +38,15 @@ public class Source extends Model {
         this.language = language;
         this.category = category;
         this.description = description;
-        this.urlsToLogos = urlsToLogos;
-        this.sortBysAvailable = sortBysAvailable;
+        this.sortBys = sortBysAvailable.stream().collect(Collectors.toMap(s -> s, s -> s));
+    }
+
+    @Override
+    public void save() {
+        if(sortBysAvailable != null) {
+            setSortBysAvailable(sortBysAvailable);
+        }
+        super.save();
     }
 
     public static Optional<Source> getSource(final String id) {
@@ -55,19 +68,11 @@ public class Source extends Model {
     }
 
     public List<String> getSortBysAvailable() {
-        return sortBysAvailable;
+        return new ArrayList<>(sortBys.keySet());
     }
 
-    public void setSortBysAvailable(List<String> sortBysAvailable) {
-        this.sortBysAvailable = sortBysAvailable;
-    }
-
-    public Map<String, String> getUrlsToLogos() {
-        return urlsToLogos;
-    }
-
-    public void setUrlsToLogos(Map<String, String> urlsToLogos) {
-        this.urlsToLogos = urlsToLogos;
+    public void setSortBysAvailable(List<String> sortBys) {
+        this.sortBys = sortBys.stream().collect(Collectors.toMap(s -> s, s -> s));
     }
 
     public String getUrl() {

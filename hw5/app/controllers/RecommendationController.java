@@ -22,9 +22,7 @@ import java.util.stream.Collectors;
 public class RecommendationController extends Controller {
 
     public Result doGet() {
-        User user = User.getUser(UUID.fromString(session("apiKey"))).get();
-
-        Map<Long, Preference> preferenceMap = user.getPreferences().stream()
+        Map<Long, Preference> preferenceMap = Preference.getPreferences(UUID.fromString(session("apiKey"))).stream()
                 .collect(Collectors.toMap(Preference::getArticleId, Function.identity()));
 
         List<Preference> favorites = preferenceMap.values()
@@ -36,14 +34,16 @@ public class RecommendationController extends Controller {
             Preference p = favorites.get(ThreadLocalRandom.current().nextInt(favorites.size()));
             Optional<Article> a = Article.getArticle(p.getArticleId());
             if(a.isPresent()) {
-                Source s = a.get().getSource();
-                    final List<String> sortBysAvailable = s.getSortBysAvailable();
+                Optional<Source> s = Source.getSource(a.get().getSourceId());
+                if(s.isPresent()) {
+                    final List<String> sortBysAvailable = s.get().getSortBysAvailable();
                     final String sortBy = sortBysAvailable.get(ThreadLocalRandom.current().nextInt(sortBysAvailable.size()));
-                    List<Article> al = Article.getArticles(s, sortBy).stream()
+                    List<Article> al = Article.getArticles(s.get(), sortBy).stream()
                             .filter(ar -> !Objects.equals(ar.getId(), p.getArticleId()))
                             .collect(Collectors.toList());
 
                     articles.add(al.get(ThreadLocalRandom.current().nextInt(al.size())));
+                }
             }
         }
 
