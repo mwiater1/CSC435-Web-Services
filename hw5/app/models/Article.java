@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.google.gson.annotations.Expose;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,9 +18,11 @@ public class Article extends Model {
     private static Finder<Long, Article> find = new Finder<>(Article.class);
 
     @Id
+    @Expose
     private long id;
 
     @Size(max = 1000)
+    @Expose
     private String url, title, sortBy, author, sourceId, urlToImage, publishedAt, description;
 
     public Article(final String author, final String title, final String description, final String url,

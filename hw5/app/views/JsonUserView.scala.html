@@ -1,0 +1,7 @@
+@(status: services.Status, message: String, user: User)
+{
+"status":"@status",
+"message":"@message",
+"userName":"@{ if (user != null) user.getUserName else null}",
+"apiKey":"@{ if (user != null) user.getApiKey else null}"
+}

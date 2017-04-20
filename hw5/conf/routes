@@ -11,3 +11,18 @@ GET     /hw5/articles               controllers.ArticlesController.doGet()
 GET     /hw5/recommendation         controllers.RecommendationController.doGet()
 GET     /hw5/preference             controllers.PreferenceController.doGet()
 POST    /hw5/preference             controllers.PreferenceController.doPost()
+
+# Restful Routes
+
+GET     /hw5/restful/language           controllers.RestfulLanguageController.doGet()
+GET     /hw5/restful/country            controllers.RestfulCountryController.doGet()
+GET     /hw5/restful/category           controllers.RestfulCategoryController.doGet()
+GET     /hw5/restful/sources            controllers.RestfulSourcesController.doGet()
+GET     /hw5/restful/recommend          controllers.RestfulRecommendController.doGet()
+GET     /hw5/restful/preference         controllers.RestfulPreferenceController.doGet()
+POST    /hw5/restful/preference         controllers.RestfulPreferenceController.doPost()
+GET     /hw5/restful/user               controllers.RestfulUserController.doGet()
+POST    /hw5/restful/user               controllers.RestfulUserController.doPost()
+PUT     /hw5/restful/user               controllers.RestfulUserController.doPut()
+DELETE  /hw5/restful/user               controllers.RestfulUserController.doDelete()
+GET     /hw5/restful/articles           controllers.RestfulArticlesController.doGet()

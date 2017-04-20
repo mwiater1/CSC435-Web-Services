@@ -1,0 +1,3 @@
+@import java.util
+@(status: services.Status, message: String, articles: util.List[Article])
+@JsonResponse(status, message, "articles", articles)

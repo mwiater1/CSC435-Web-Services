@@ -3,6 +3,7 @@ package models;
 import com.avaje.ebean.ExpressionList;
 import com.avaje.ebean.Model;
 import com.avaje.ebean.annotation.DbJson;
+import com.google.gson.annotations.Expose;
 import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
@@ -18,15 +19,18 @@ public class Source extends Model {
     public static Finder<String, Source> find = new Finder<>(Source.class);
 
     @Id
+    @Expose
     private String id;
 
     private List<String> sortBysAvailable;
 
     @DbJson
+    @Expose
     private Map<String,String> sortBys;
 
     @Constraints.Required
     @Size(max = 1000)
+    @Expose
     private String url, name, category, language, country, description;
 
     public Source(String id, String name, String description, String url, String category, String language,

@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.google.gson.annotations.Expose;
 import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
@@ -16,12 +17,16 @@ public class Preference extends Model {
     private static Finder<Long, Preference> find = new Finder<>(Preference.class);
 
     @Id
+    @Expose
     private long id;
     @Constraints.Required
+    @Expose
     private UUID apiKey;
     @Constraints.Required
+    @Expose
     private long articleId;
     @Constraints.Required
+    @Expose
     private boolean favorite, read;
 
     public Preference(final UUID apiKey, final long articleId, final boolean favorite, final boolean read) {

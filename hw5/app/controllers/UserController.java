@@ -62,25 +62,28 @@ public class UserController extends Controller {
             logout();
             return ok();
         } else {
+            Optional<User> oldUser = null;
             try {
-                final Optional<User> user = User.getUser(UUID.fromString(session("apiKey")));
+                oldUser = User.getUser(UUID.fromString(session("apiKey")));
 
-                if (user.isPresent()) {
+                if (oldUser.isPresent()) {
+                    final User user = new User(oldUser.get().getUserName(), oldUser.get().getPassword(), oldUser.get().getApiKey());
                     if (userName != null && !userName.isEmpty()) {
-                        user.get().setUserName(userName);
+                        user.setUserName(userName);
                     }
                     if (password != null && !password.isEmpty()) {
-                        user.get().setPassword(password);
+                        user.setPassword(password);
                     }
 
-                    user.get().save();
-                    System.out.println(String.format("U: %s P: %s",userName, password));
-                    login(user.get());
+                    oldUser.get().delete();
+                    user.save();
+                    login(user);
                 } else {
                     logout();
                 }
                 return ok();
             } catch (PersistenceException e) {
+                new User(oldUser.get().getUserName(), oldUser.get().getPassword(), oldUser.get().getApiKey()).save();
                 return status(409, "User with that name already exists!");
             }
         }

@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.google.gson.annotations.Expose;
 import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
@@ -15,17 +16,24 @@ public class User extends Model {
     private static Finder<String, User> find = new Finder<>(User.class);
 
     @Id
+    @Expose
     private String userName;
     @Constraints.Required
+    @Expose
     private String password;
 
     @Constraints.Required
+    @Expose
     private UUID apiKey;
 
     public User(final String userName, final String password) {
+        this(userName, password, UUID.randomUUID());
+    }
+
+    public User(final String userName, final String password, final UUID apiKey) {
+        this.apiKey = apiKey;
         this.userName = userName;
         this.password = password;
-        this.apiKey = UUID.randomUUID();
     }
 
     public static Optional<User> getUser(final UUID apiKey) {

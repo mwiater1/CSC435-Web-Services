@@ -11,6 +11,7 @@ public class Auth extends Action.Simple {
 
     @Override
     public CompletionStage<Result> call(Http.Context ctx) {
+
         if(ctx.session().get("apiKey") != null) {
             return delegate.call(ctx);
         } else {
