@@ -1,0 +1,9 @@
+model {
+    def status
+    def message
+}
+
+json {
+    status status
+    message message?:""
+}

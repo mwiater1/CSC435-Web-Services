@@ -1,0 +1,11 @@
+model {
+    def status
+    def message
+    def dataName
+    Object data
+}
+json {
+    status status?: ""
+    message message?: ""
+    "$dataName" g.render(data)
+}

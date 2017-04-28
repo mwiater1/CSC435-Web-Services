@@ -1,0 +1,7 @@
+model {
+    def status
+    def message
+    Object data
+}
+
+json g.render(template: "/jsonBase", model: [status: status, message: message, dataName: "preferences", data: data])

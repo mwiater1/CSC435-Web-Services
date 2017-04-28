@@ -1,0 +1,14 @@
+import com.mateuszwiater.csc435.domains.User
+
+model {
+    def status
+    def message
+    User user
+}
+
+json {
+    status status
+    message message?:""
+    userName user?.userName
+    apiKey user?.apiKey
+}
