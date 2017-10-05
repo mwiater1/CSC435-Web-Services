@@ -29,7 +29,7 @@ public class RestfulRecommendController {
                     .filter(Preference::isFavorite)
                     .collect(Collectors.toList());
             final Optional<Preference> preference = preferences.stream()
-                    .skip(ThreadLocalRandom.current().nextInt(preferences.size()))
+                    .skip(ThreadLocalRandom.current().nextInt(preferences.size()+1))
                     .findAny();
             if(preference.isPresent()) {
                 final Optional<Article> article = Article.getArticle(preference.get().getArticleId());
@@ -38,12 +38,12 @@ public class RestfulRecommendController {
                     if(source.isPresent()) {
                         final List<String> sortBys = source.get().getSortBysAvailable();
                         final Optional<String> sortBy = sortBys.stream()
-                                .skip(ThreadLocalRandom.current().nextInt(sortBys.size()))
+                                .skip(ThreadLocalRandom.current().nextInt(sortBys.size()+1))
                                 .findAny();
                         if(sortBy.isPresent()) {
                             final List<Article> articles = Article.getArticles(source.get(), sortBy.get());
                             final Optional<Article> a = articles.stream()
-                                    .skip(ThreadLocalRandom.current().nextInt(articles.size()))
+                                    .skip(ThreadLocalRandom.current().nextInt(articles.size()+1))
                                     .findAny();
                             if(a.isPresent()) {
                                 return RecommendView.getView(OK, "", a.get());

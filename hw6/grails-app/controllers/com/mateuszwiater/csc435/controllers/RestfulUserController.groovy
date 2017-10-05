@@ -32,21 +32,27 @@ class RestfulUserController {
     def doPost() {
         String userName = params.userName
         String password = params.password
+        String logout = params.logout
         User user = session["user"] as User
 
-        try {
-            if (userName != null && !userName.isEmpty()) {
-                user.setUserName(userName)
-            }
-            if (password != null && !password.isEmpty()) {
-                user.setPassword(password)
-            }
+        if(logout != null && Boolean.valueOf(logout)) {
+            this.logout()
+            [status: "ok", message: "Logged Out"]
+        } else {
+            try {
+                if (userName != null && !userName.isEmpty()) {
+                    user.setUserName(userName)
+                }
+                if (password != null && !password.isEmpty()) {
+                    user.setPassword(password)
+                }
 
-            user.save(flush: true, failOnError: true)
-            [status: "ok", user: user]
-        } catch (ValidationException | DuplicateKeyException e) {
-            login(userService.getUser(user.getApiKey()).get())
-            [status: "fail", message: "User With That Name Already Exists!"]
+                user.save(flush: true, failOnError: true)
+                [status: "ok", user: user]
+            } catch (ValidationException | DuplicateKeyException e) {
+                login(userService.getUser(user.getApiKey()).get())
+                [status: "fail", message: "User With That Name Already Exists!"]
+            }
         }
     }
 

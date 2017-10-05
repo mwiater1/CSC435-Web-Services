@@ -14,7 +14,7 @@ class AuthInterceptor {
     boolean before() {
         if(session["user"] == null) {
             if((params.controller?:"").contains("restful")) {
-                response.status = 400
+                response.status = 401
                 render(view: "/auth", model: [status: "fail", message: "User Not Authenticated!"])
             } else {
                 redirect(uri: "hw6")

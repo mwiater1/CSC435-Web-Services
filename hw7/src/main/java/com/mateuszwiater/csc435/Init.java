@@ -26,7 +26,7 @@ public class Init {
         cfg.setAPIBuiltinEnabled(true);
         Util.setConfiguration(cfg);
 
-        port(8080);
+        port(8081);
 
         before("/hw7/restful/*", (req, resp) -> resp.type("application/json; charset=UTF-8"));
 

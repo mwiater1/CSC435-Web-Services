@@ -37,7 +37,7 @@ public class DatabaseConnector {
                 // Create the Sources table
                 st.addBatch("CREATE TABLE SOURCES (" +
                         "ID VARCHAR(255) NOT NULL," +
-                        "NAME VARCHAR(255) NOT NULL," +
+                        "NAME VARCHAR(1024) NOT NULL," +
                         "DESCRIPTION VARCHAR(1024) NOT NULL," +
                         "URL VARCHAR(1024) NOT NULL," +
                         "CATEGORY VARCHAR(255) NOT NULL," +
@@ -49,8 +49,8 @@ public class DatabaseConnector {
                 // Create the Articles table
                 st.addBatch("CREATE TABLE ARTICLES (" +
                         "ID int NOT NULL AUTO_INCREMENT," +
-                        "AUTHOR VARCHAR(255) NOT NULL," +
-                        "TITLE VARCHAR(255) NOT NULL," +
+                        "AUTHOR VARCHAR(1024) NOT NULL," +
+                        "TITLE VARCHAR(1024) NOT NULL," +
                         "DESCRIPTION VARCHAR(1024) NOT NULL," +
                         "URL VARCHAR(1024) NOT NULL," +
                         "URLTOIMAGE VARCHAR(1024) NOT NULL," +
